@@ -1,6 +1,6 @@
 import { gridCl } from "./Grid";
 
-const CELL_TYPES = {
+export const CELL_TYPES = {
   EMPTY: 0,
   START: 1,
   END: 2,

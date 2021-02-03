@@ -3,6 +3,7 @@ import { isFinishOrStart, determineCellType } from "./CellActions";
 import "./cell.css";
 
 export default class Cell {
+  opened = false;
   // 0 = empty / 1 = start / 2 = end / 3 = obstacle
   cellType = 0;
 

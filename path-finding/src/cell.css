@@ -1,48 +1,46 @@
 @keyframes cell-grow {
-    from {
-        transform: scale(1);
-        z-index: 0;
-    }
-    to {
-        transform: scale(1.2);
-        z-index: 1;
-    }
+  from {
+    transform: scale(1);
+    z-index: 0;
+  }
+  to {
+    transform: scale(1.2);
+    z-index: 1;
+  }
 }
 @keyframes cell-shrink {
-    from {
-        transform: scale(1.2);
-        z-index: 1;
-    }
+  from {
+    transform: scale(1.2);
+    z-index: 1;
+  }
 
-    to {
-        transform: scale(1);
-        z-index: 0;
-    }
+  to {
+    transform: scale(1);
+    z-index: 0;
+  }
 }
 
 .cell {
-    background-color: rgba(221, 221, 221, 0.603);
-    width: 40px;
-    height: 40px;
-    border-width: 1px;
-    border-color:rgba(102, 102, 102, 0.493);
-    border-style:solid;
+  background-color: rgba(221, 221, 221, 0.603);
+  width: 40px;
+  height: 40px;
+  border-width: 1px;
+  border-color: rgba(102, 102, 102, 0.493);
+  border-style: solid;
 
-    user-select: none;
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -o-user-select: none;
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
 
-    animation-duration: 0.3s;
-    animation-name: cell-shrink;
-    animation-fill-mode: forwards;
+  animation-duration: 0.3s;
+  animation-name: cell-shrink;
+  animation-fill-mode: forwards;
 }
 
 .cell:hover {
-    animation-duration: 0.5s;
-    animation-name: cell-grow;
-    animation-fill-mode: forwards;
+  animation-duration: 0.5s;
+  animation-name: cell-grow;
+  animation-fill-mode: forwards;
 }
-
-

@@ -2,7 +2,7 @@ export default class Heap {
   /*The cell at the top of the heap has succeeded all the other cells and has the lowest fCost */
   cells = [];
 
-  // if this is ever 0 it means there are no cells since it is always 1 ahead of the number of cells in the heap
+  // the index of the last cell in the heap
   lastHeapCellIndex = -1;
 
   contains(cell) {
@@ -37,8 +37,12 @@ export default class Heap {
     return firstCell;
   }
 
-  updateItem(cell) {
-    this.sortUp(cell);
+  update(cell, sortUp) {
+    if (sortUp) {
+      this.sortUp(cell);
+    } else {
+      this.sortDown(cell);
+    }
   }
 
   sortUp(cell) {
@@ -48,7 +52,7 @@ export default class Heap {
 
       var parentCell = this.cells[parentIndex];
 
-      // if the cell succeeds (has a lower fcost) the parent cell
+      // if the cell succeeds the parent cell
       if (cell.compareTo(parentCell) > 0) {
         // swap the cell and parent positions in the heap
         this.swap(cell, parentCell);
@@ -60,7 +64,9 @@ export default class Heap {
 
   sortDown(cell) {
     // #region Explanation
-    /*we continue swapping the given cell down through the heap.
+    /*
+    A* algorithm example: 
+    we continue swapping the given cell down through the heap.
 
     The goal is to place the cell in a position in the heap where
     the parent cell is of a lower fCost and its children cells
@@ -91,17 +97,17 @@ export default class Heap {
 
         // if the right child exists
         if (rightChildIndex < this.cells.length) {
-          // if the right child succeeds (has a lower fcost) the left child
+          // if the right child succeeds the left child
           if (
             this.cells[rightChildIndex].compareTo(this.cells[leftChildIndex]) >
             0
           ) {
-            // we will be swapping with the child that has the lowest fCost
+            // we will be swapping with the child
             swapIndex = rightChildIndex;
           }
         }
 
-        // if the cell precedes (has a higher fCost) the cell to swap with
+        // if the cell precedes the cell to swap with
         if (cell.compareTo(this.cells[swapIndex]) < 0) {
           // swap with the cell
           this.swap(cell, this.cells[swapIndex]);
