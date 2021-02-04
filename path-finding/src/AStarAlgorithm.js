@@ -2,7 +2,66 @@ import Heap from "./Heap";
 import { gridCl } from "./Grid";
 import { CELL_TYPES } from "./CellActions";
 
-function search() {
+var isSearching = false;
+
+export default async function AStarPathFind(canCrossDiagonals) {
+  // lock the async function so it can only run one at a time
+  if (isSearching) {
+    console.log("already searching");
+    return;
+  }
+  isSearching = true;
+  //search for the path
+  const path = await searching(canCrossDiagonals);
+  if (path == null) {
+    console.log("no path");
+    return;
+  }
+  //draw the path
+  for (let i = 0; i < path.length; i++) {
+    const cell = path[i];
+    cell.isOnPath = true;
+    cell.setCellRerender((rerender) => !rerender);
+    await timer(10);
+  }
+
+  isSearching = false;
+}
+
+function searching(canCrossDiagonals) {
+  return new Promise((resolve) => {
+    resolve(search(canCrossDiagonals));
+  });
+}
+
+const timer = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function resetCells() {
+  //doesnt reset properly if the end point is moved after a search
+  gridCl.grid.forEach((row) => {
+    row.forEach((cell) => {
+      var rerender = false;
+      if (cell.opened) {
+        cell.opened = false;
+        rerender = true;
+      }
+      if (cell.isOnPath) {
+        cell.isOnPath = false;
+        rerender = true;
+      }
+      if (cell.closed) {
+        cell.closed = false;
+        rerender = true;
+      }
+      if (rerender) {
+        cell.setCellRerender((rerender) => !rerender);
+      }
+    });
+  });
+}
+
+async function search(canCrossDiagonals) {
+  resetCells();
   // create a heap that will contain any cells that we have opened (assigned a gcost)
   const openHeap = new Heap();
 
@@ -16,17 +75,25 @@ function search() {
   openHeap.add(startCell);
 
   var foundPath = false;
-
   while (openHeap.lastHeapCellIndex >= 0) {
     const currentCell = openHeap.removeFirst();
 
+    //rerender with the color of a closed cell
+    currentCell.closed = true;
+    currentCell.setCellRerender((rerender) => !rerender);
+
     closedSet.add(currentCell);
+
     if (currentCell === endCell) {
       foundPath = true;
       break;
     }
-
-    const neighbours = gridCl.getMooreNeighbours(currentCell);
+    var neighbours = [];
+    if (canCrossDiagonals) {
+      neighbours = gridCl.getMooreNeighbours(currentCell.x, currentCell.y);
+    } else {
+      neighbours = gridCl.getVonNeumannNeighbours(currentCell.x, currentCell.y);
+    }
     for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i];
       if (
@@ -49,17 +116,25 @@ function search() {
 
         if (!openHeap.contains(neighbour)) {
           openHeap.add(neighbour);
+          neighbour.opened = true;
+
+          //rerender with the color of an opened cell
+          neighbour.setCellRerender((rerender) => !rerender);
         } else {
           openHeap.update(neighbour, true);
         }
       }
     }
+
+    await timer(15);
   }
 
   if (foundPath) {
-    retracePath(startCell, endCell);
+    const path = retracePath(startCell, endCell);
+    return path;
   } else {
     console.log("no path found");
+    return null;
   }
 }
 

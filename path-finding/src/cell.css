@@ -27,7 +27,8 @@
   border-width: 1px;
   border-color: rgba(102, 102, 102, 0.493);
   border-style: solid;
-
+  font-size: x-small;
+  
   user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;

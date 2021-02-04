@@ -1,5 +1,6 @@
 import React from "react";
-import Cell, { CellSquare } from "./Cell";
+import Cell, { CellSquareState } from "./Cell";
+import { CELL_TYPES } from "./CellActions";
 import "./grid.css";
 
 class GridCl {
@@ -32,8 +33,28 @@ class GridCl {
         if (!this.cellIsInGrid(posX + x, posY + y)) {
           continue;
         }
+
         neighbours.push(this.grid[posY + y][posX + x]);
       }
+    }
+
+    return neighbours;
+  };
+
+  getVonNeumannNeighbours = (posX, posY) => {
+    const neighbours = [];
+
+    if (this.cellIsInGrid(posX - 1, posY)) {
+      neighbours.push(this.grid[posY][posX - 1]);
+    }
+    if (this.cellIsInGrid(posX + 1, posY)) {
+      neighbours.push(this.grid[posY][posX + 1]);
+    }
+    if (this.cellIsInGrid(posX, posY - 1)) {
+      neighbours.push(this.grid[posY - 1][posX]);
+    }
+    if (this.cellIsInGrid(posX, posY + 1)) {
+      neighbours.push(this.grid[posY + 1][posX]);
     }
 
     return neighbours;
@@ -46,6 +67,46 @@ class GridCl {
       return true;
     }
   };
+
+  clearEntireGrid = () => {
+    this.grid.forEach((row) => {
+      row.forEach((cell) => {
+        var rerender = false;
+        if (cell.opened) {
+          cell.opened = false;
+          rerender = true;
+        }
+        if (cell.isOnPath) {
+          cell.isOnPath = false;
+          rerender = true;
+        }
+        if (cell.closed) {
+          cell.closed = false;
+          rerender = true;
+        }
+        if (cell.cellType !== CELL_TYPES.EMPTY) {
+          cell.cellType = CELL_TYPES.EMPTY;
+          rerender = true;
+        }
+        this.startCell = null;
+        this.endCell = null;
+        if (rerender) {
+          cell.setCellRerender((rerender) => !rerender);
+        }
+      });
+    });
+  };
+
+  clearWalls = () => {
+    this.grid.forEach((row) => {
+      row.forEach((cell) => {
+        if (cell.cellType === CELL_TYPES.OBSTACLE) {
+          cell.cellType = CELL_TYPES.EMPTY;
+          cell.setCellRerender((rerender) => !rerender);
+        }
+      });
+    });
+  };
 }
 
 export const gridCl = new GridCl();
@@ -55,7 +116,7 @@ function Grid() {
     <section id="grid">
       {gridCl.grid.map((row) =>
         row.map((cell) => {
-          return <CellSquare cell={cell} key={cell.x + " " + cell.y} />;
+          return <CellSquareState cell={cell} key={cell.x + " " + cell.y} />;
         })
       )}
     </section>

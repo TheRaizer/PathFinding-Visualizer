@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { isFinishOrStart, determineCellType } from "./CellActions";
 import "./cell.css";
 
 export default class Cell {
+  setCellRerender = null;
+  isOnPath = false;
   opened = false;
+  closed = false;
   // 0 = empty / 1 = start / 2 = end / 3 = obstacle
   cellType = 0;
 
@@ -27,17 +30,28 @@ export default class Cell {
   }
 
   getCellColor = () => {
-    switch (this.cellType) {
-      case 0:
-        return "rgba(221, 221, 221, 0.603)";
-      case 1:
-        return "green";
-      case 2:
-        return "red";
-      case 3:
-        return "black";
-      default:
-        throw new Error("Out of range exception");
+    if (
+      (!this.opened && !this.isOnPath && !this.closed) ||
+      this.cellType !== 0
+    ) {
+      switch (this.cellType) {
+        case 0:
+          return "rgba(221, 221, 221, 0.603)";
+        case 1:
+          return "green";
+        case 2:
+          return "red";
+        case 3:
+          return "black";
+        default:
+          throw new Error("Out of range exception");
+      }
+    } else if (this.isOnPath) {
+      return "lightskyblue";
+    } else if (this.closed) {
+      return "lightgray";
+    } else if (this.opened) {
+      return "lightgreen";
     }
   };
 
@@ -65,9 +79,15 @@ export default class Cell {
 var mouseDown = false;
 var cellTypeOnMouseDown = -1;
 
-export function CellSquare(props) {
+export function CellSquareState(props) {
   const { cell } = props;
   const [, setCellRerender] = useState(false);
+
+  useEffect(() => {
+    if (cell.rerenderCell == null) {
+      cell.setCellRerender = setCellRerender;
+    }
+  }, [cell]);
 
   document.onmousedown = () => (mouseDown = true);
 
@@ -76,30 +96,23 @@ export function CellSquare(props) {
     cellTypeOnMouseDown = -1;
   };
 
+  return <CellSquare state={{ cell }} />;
+}
+
+function CellSquare({ state }) {
+  const { cell } = state;
   return (
     <div
       className="cell"
       style={{ backgroundColor: cell.getCellColor() }}
       onMouseMove={(evt) =>
-        determineCellType(
-          evt,
-          mouseDown,
-          cellTypeOnMouseDown,
-          cell,
-          setCellRerender
-        )
+        determineCellType(evt, mouseDown, cellTypeOnMouseDown, cell)
       }
       onMouseDown={(evt) => {
         cellTypeOnMouseDown = cell.cellType;
-        determineCellType(
-          evt,
-          true,
-          cellTypeOnMouseDown,
-          cell,
-          setCellRerender
-        );
+        determineCellType(evt, true, cellTypeOnMouseDown, cell);
       }}
-      onClick={(evt) => isFinishOrStart(evt, cell, setCellRerender)}
+      onClick={(evt) => isFinishOrStart(evt, cell)}
     ></div>
   );
 }

@@ -5,33 +5,34 @@ export const CELL_TYPES = {
   START: 1,
   END: 2,
   OBSTACLE: 3,
+  OPENED: 4,
+  CLOSED: 5,
+  IS_ON_PATH: 6,
 };
 
-export const isFinishOrStart = (evt, cell, setCellRerender) => {
+export const isFinishOrStart = (evt, cell) => {
   if (evt.altKey) {
     if (cell.cellType === CELL_TYPES.END) {
       gridCl.endCell = null;
-      changeCellType(cell, CELL_TYPES.EMPTY, setCellRerender);
+      changeCellType(cell, CELL_TYPES.EMPTY);
     } else {
       if (gridCl.endCell != null) {
-        //user needs to get rid of end cell to place it somewhere else
-        return;
+        changeCellType(gridCl.endCell, CELL_TYPES.EMPTY);
       }
-      changeCellType(cell, CELL_TYPES.END, setCellRerender);
+      changeCellType(cell, CELL_TYPES.END);
       gridCl.endCell = cell;
     }
   } else if (evt.ctrlKey) {
     // if the cell is the start cell then make it empty
     if (cell.cellType === CELL_TYPES.START) {
       gridCl.startCell = null;
-      changeCellType(cell, CELL_TYPES.EMPTY, setCellRerender);
+      changeCellType(cell, CELL_TYPES.EMPTY);
     } else {
       if (gridCl.startCell != null) {
-        //user needs to get rid of end cell to place it somewhere else
-        return;
+        changeCellType(gridCl.startCell, CELL_TYPES.EMPTY);
       }
       // make the cell the start
-      changeCellType(cell, CELL_TYPES.START, setCellRerender);
+      changeCellType(cell, CELL_TYPES.START);
       gridCl.startCell = cell;
     }
   }
@@ -41,8 +42,7 @@ export const determineCellType = (
   evt,
   mouseDown,
   cellTypeOnMouseDown,
-  cell,
-  setCellRerender
+  cell
 ) => {
   if (mouseDown) {
     if (cellTypeOnMouseDown === -1) return;
@@ -56,12 +56,12 @@ export const determineCellType = (
       } else if (cell === gridCl.startCell) {
         return;
       }
-      changeCellType(cell, cellType, setCellRerender);
+      changeCellType(cell, cellType);
     }
   }
 };
 
-const changeCellType = (cell, cellType, setCellRerender) => {
+const changeCellType = (cell, cellType) => {
   cell.cellType = cellType;
-  setCellRerender((rerender) => !rerender);
+  cell.setCellRerender((rerender) => !rerender);
 };
