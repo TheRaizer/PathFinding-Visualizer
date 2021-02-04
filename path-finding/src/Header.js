@@ -6,6 +6,7 @@ import "./header.css";
 
 function Header() {
   const [canCrossDiagonals, setCanCrossDiagonals] = useState(true);
+  const [animationInterval, setAnimationInterval] = useState(15);
   const [missingCell, setMissingCell] = useState(false);
 
   return (
@@ -20,7 +21,7 @@ function Header() {
           <button
             onClick={() => {
               if (gridCl.startCell != null && gridCl.endCell != null) {
-                AStarPathFind(canCrossDiagonals);
+                AStarPathFind(canCrossDiagonals, animationInterval);
               } else {
                 setMissingCell(true);
               }
@@ -40,6 +41,14 @@ function Header() {
             }
           />
           Can Cross Diagonals
+        </Col>
+        <Col>
+          <p>Animation Interval (ms)</p>
+          <input
+            type="number"
+            value={animationInterval}
+            onChange={(evt) => setAnimationInterval(evt.target.value)}
+          />
         </Col>
       </Row>
     </Container>

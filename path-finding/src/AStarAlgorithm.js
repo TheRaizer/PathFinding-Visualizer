@@ -3,8 +3,9 @@ import { gridCl } from "./Grid";
 import { CELL_TYPES } from "./CellActions";
 
 var isSearching = false;
+const pathAnimationTime = 10;
 
-export default async function AStarPathFind(canCrossDiagonals) {
+export default async function AStarPathFind(canCrossDiagonals, animTime) {
   // lock the async function so it can only run one at a time
   if (isSearching) {
     console.log("already searching");
@@ -12,7 +13,7 @@ export default async function AStarPathFind(canCrossDiagonals) {
   }
   isSearching = true;
   //search for the path
-  const path = await searching(canCrossDiagonals);
+  const path = await searching(canCrossDiagonals, animTime);
   if (path == null) {
     console.log("no path");
     return;
@@ -22,22 +23,27 @@ export default async function AStarPathFind(canCrossDiagonals) {
     const cell = path[i];
     cell.isOnPath = true;
     cell.setCellRerender((rerender) => !rerender);
-    await timer(10);
+    await timer(pathAnimationTime);
   }
 
   isSearching = false;
 }
 
-function searching(canCrossDiagonals) {
+function searching(canCrossDiagonals, animTime) {
   return new Promise((resolve) => {
-    resolve(search(canCrossDiagonals));
+    resolve(search(canCrossDiagonals, animTime));
   });
 }
 
 const timer = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function resetCells() {
-  //doesnt reset properly if the end point is moved after a search
+function reset() {
+  return new Promise((resolve) => {
+    resolve(resetCells());
+  });
+}
+
+async function resetCells() {
   gridCl.grid.forEach((row) => {
     row.forEach((cell) => {
       var rerender = false;
@@ -60,8 +66,8 @@ function resetCells() {
   });
 }
 
-async function search(canCrossDiagonals) {
-  resetCells();
+async function search(canCrossDiagonals, animTime) {
+  await reset();
   // create a heap that will contain any cells that we have opened (assigned a gcost)
   const openHeap = new Heap();
 
@@ -126,7 +132,7 @@ async function search(canCrossDiagonals) {
       }
     }
 
-    await timer(15);
+    await timer(animTime);
   }
 
   if (foundPath) {
