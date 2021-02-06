@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import AStarPathFind from "./AStarAlgorithm";
+import DijkstrasPathFind from "./DijkstrasAlgorithm";
+import { searchVars } from "./Search";
 import { gridCl } from "./Grid";
 import "./header.css";
 
@@ -27,7 +29,18 @@ function Header() {
               }
             }}
           >
-            A* PathFind
+            A*
+          </button>
+          <button
+            onClick={() => {
+              if (gridCl.startCell != null && gridCl.endCell != null) {
+                DijkstrasPathFind(canCrossDiagonals, animationInterval);
+              } else {
+                setMissingCell(true);
+              }
+            }}
+          >
+            Dijkstras
           </button>
           <button onClick={gridCl.clearEntireGrid}>Clear Entire Grid</button>
           <button onClick={gridCl.clearWalls}>Clear Walls</button>
@@ -47,7 +60,10 @@ function Header() {
           <input
             type="number"
             value={animationInterval}
-            onChange={(evt) => setAnimationInterval(evt.target.value)}
+            onChange={(evt) => {
+              setAnimationInterval(evt.target.value);
+              searchVars.searchAnimationTime = evt.target.value;
+            }}
           />
         </Col>
       </Row>

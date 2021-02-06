@@ -5,6 +5,10 @@ export default class Heap {
   // the index of the last cell in the heap
   lastHeapCellIndex = -1;
 
+  constructor(searchType) {
+    this.searchType = searchType;
+  }
+
   contains(cell) {
     // check if the heap includes a given cell
     return this.cells.includes(cell);
@@ -53,7 +57,7 @@ export default class Heap {
       var parentCell = this.cells[parentIndex];
 
       // if the cell succeeds the parent cell
-      if (cell.compareTo(parentCell) > 0) {
+      if (cell.compareTo(parentCell, this.searchType) > 0) {
         // swap the cell and parent positions in the heap
         this.swap(cell, parentCell);
       } else {
@@ -99,8 +103,10 @@ export default class Heap {
         if (rightChildIndex < this.cells.length) {
           // if the right child succeeds the left child
           if (
-            this.cells[rightChildIndex].compareTo(this.cells[leftChildIndex]) >
-            0
+            this.cells[rightChildIndex].compareTo(
+              this.cells[leftChildIndex],
+              this.searchType
+            ) > 0
           ) {
             // we will be swapping with the child
             swapIndex = rightChildIndex;
@@ -108,7 +114,7 @@ export default class Heap {
         }
 
         // if the cell precedes the cell to swap with
-        if (cell.compareTo(this.cells[swapIndex]) < 0) {
+        if (cell.compareTo(this.cells[swapIndex], this.searchType) < 0) {
           // swap with the cell
           this.swap(cell, this.cells[swapIndex]);
         } else {

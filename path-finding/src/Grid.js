@@ -97,6 +97,35 @@ class GridCl {
     });
   };
 
+  resetForSearch() {
+    return new Promise((resolve) => {
+      resolve(this.resetCellsForSearch());
+    });
+  }
+
+  async resetCellsForSearch() {
+    gridCl.grid.forEach((row) => {
+      row.forEach((cell) => {
+        var rerender = false;
+        if (cell.opened) {
+          cell.opened = false;
+          rerender = true;
+        }
+        if (cell.isOnPath) {
+          cell.isOnPath = false;
+          rerender = true;
+        }
+        if (cell.closed) {
+          cell.closed = false;
+          rerender = true;
+        }
+        if (rerender) {
+          cell.setCellRerender((rerender) => !rerender);
+        }
+      });
+    });
+  }
+
   clearWalls = () => {
     this.grid.forEach((row) => {
       row.forEach((cell) => {
@@ -107,6 +136,17 @@ class GridCl {
       });
     });
   };
+
+  calculateDistance(cellA, cellB) {
+    var dstX = Math.abs(cellA.x - cellB.x);
+    var dstY = Math.abs(cellA.y - cellB.y);
+
+    if (dstX > dstY) {
+      return 14 * dstY + 10 * (dstX - dstY);
+    }
+
+    return 14 * dstX + 10 * (dstY - dstX);
+  }
 }
 
 export const gridCl = new GridCl();

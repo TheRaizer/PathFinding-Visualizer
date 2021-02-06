@@ -1,21 +1,22 @@
 import Heap from "./Heap";
 import { gridCl } from "./Grid";
 import { CELL_TYPES } from "./CellActions";
+import { searchVars, retracePath } from "./Search";
+import { SEARCH_TYPES } from "./Search";
+import { timer } from "./UtilityFuncs";
 
-var isSearching = false;
-const pathAnimationTime = 10;
-
-export default async function AStarPathFind(canCrossDiagonals, animTime) {
+export default async function AStarPathFind(canCrossDiagonals) {
   // lock the async function so it can only run one at a time
-  if (isSearching) {
+  if (searchVars.isSearching) {
     console.log("already searching");
     return;
   }
-  isSearching = true;
+  searchVars.isSearching = true;
   //search for the path
-  const path = await searching(canCrossDiagonals, animTime);
+  const path = await searching(canCrossDiagonals);
   if (path == null) {
     console.log("no path");
+    searchVars.isSearching = false;
     return;
   }
   //draw the path
@@ -23,53 +24,22 @@ export default async function AStarPathFind(canCrossDiagonals, animTime) {
     const cell = path[i];
     cell.isOnPath = true;
     cell.setCellRerender((rerender) => !rerender);
-    await timer(pathAnimationTime);
+    await timer(searchVars.pathAnimationTime);
   }
 
-  isSearching = false;
+  searchVars.isSearching = false;
 }
 
-function searching(canCrossDiagonals, animTime) {
+function searching(canCrossDiagonals) {
   return new Promise((resolve) => {
-    resolve(search(canCrossDiagonals, animTime));
+    resolve(search(canCrossDiagonals));
   });
 }
 
-const timer = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-function reset() {
-  return new Promise((resolve) => {
-    resolve(resetCells());
-  });
-}
-
-async function resetCells() {
-  gridCl.grid.forEach((row) => {
-    row.forEach((cell) => {
-      var rerender = false;
-      if (cell.opened) {
-        cell.opened = false;
-        rerender = true;
-      }
-      if (cell.isOnPath) {
-        cell.isOnPath = false;
-        rerender = true;
-      }
-      if (cell.closed) {
-        cell.closed = false;
-        rerender = true;
-      }
-      if (rerender) {
-        cell.setCellRerender((rerender) => !rerender);
-      }
-    });
-  });
-}
-
-async function search(canCrossDiagonals, animTime) {
-  await reset();
+async function search(canCrossDiagonals) {
+  await gridCl.resetForSearch();
   // create a heap that will contain any cells that we have opened (assigned a gcost)
-  const openHeap = new Heap();
+  const openHeap = new Heap(SEARCH_TYPES.A_STAR);
 
   //closed set containing the cells that are part of the path
   const closedSet = new Set();
@@ -110,14 +80,14 @@ async function search(canCrossDiagonals, animTime) {
       }
 
       var newCostToNeighbour =
-        currentCell.gCost + calculateDistance(currentCell, neighbour);
+        currentCell.gCost + gridCl.calculateDistance(currentCell, neighbour);
 
       if (
         newCostToNeighbour < neighbour.gCost ||
         !openHeap.contains(neighbour)
       ) {
         neighbour.gCost = newCostToNeighbour;
-        neighbour.hCost = calculateDistance(neighbour, endCell);
+        neighbour.hCost = gridCl.calculateDistance(neighbour, endCell);
         neighbour.parentCell = currentCell;
 
         if (!openHeap.contains(neighbour)) {
@@ -132,7 +102,10 @@ async function search(canCrossDiagonals, animTime) {
       }
     }
 
-    await timer(animTime);
+    // animation interval
+    if (searchVars.searchAnimationTime > 0) {
+      await timer(searchVars.searchAnimationTime);
+    }
   }
 
   if (foundPath) {
@@ -142,28 +115,4 @@ async function search(canCrossDiagonals, animTime) {
     console.log("no path found");
     return null;
   }
-}
-
-function retracePath(start, end) {
-  const path = [];
-  var currentCell = end;
-
-  while (currentCell !== start) {
-    path.push(currentCell);
-    currentCell = currentCell.parentCell;
-  }
-  path.reverse();
-
-  return path;
-}
-
-function calculateDistance(cellA, cellB) {
-  var dstX = Math.abs(cellA.x - cellB.x);
-  var dstY = Math.abs(cellA.y - cellB.y);
-
-  if (dstX > dstY) {
-    return 14 * dstY + 10 * (dstX - dstY);
-  }
-
-  return 14 * dstX + 10 * (dstY - dstX);
 }
