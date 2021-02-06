@@ -12,6 +12,7 @@ export default class Cell {
   cellType = 0;
 
   // #region A* path finding
+  
   // the cost from this cell to the start cell
   gCost = 0;
   // the cost from this cell to the end cell

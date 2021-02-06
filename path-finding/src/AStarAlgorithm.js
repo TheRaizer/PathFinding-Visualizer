@@ -38,10 +38,10 @@ function searching(canCrossDiagonals) {
 
 async function search(canCrossDiagonals) {
   await gridCl.resetForSearch();
-  // create a heap that will contain any cells that we have opened (assigned a gcost)
+  // create a heap that will contain any cells that we have opened
   const openHeap = new Heap(SEARCH_TYPES.A_STAR);
 
-  //closed set containing the cells that are part of the path
+  //closed set containing the cells thats neighbours have been checked
   const closedSet = new Set();
 
   const startCell = gridCl.startCell;
@@ -51,14 +51,9 @@ async function search(canCrossDiagonals) {
   openHeap.add(startCell);
 
   var foundPath = false;
+
   while (openHeap.lastHeapCellIndex >= 0) {
     const currentCell = openHeap.removeFirst();
-
-    //rerender with the color of a closed cell
-    currentCell.closed = true;
-    currentCell.setCellRerender((rerender) => !rerender);
-
-    closedSet.add(currentCell);
 
     if (currentCell === endCell) {
       foundPath = true;
@@ -102,6 +97,11 @@ async function search(canCrossDiagonals) {
       }
     }
 
+    //rerender with the color of a closed cell
+    currentCell.closed = true;
+    currentCell.setCellRerender((rerender) => !rerender);
+
+    closedSet.add(currentCell);
     // animation interval
     if (searchVars.searchAnimationTime > 0) {
       await timer(searchVars.searchAnimationTime);
