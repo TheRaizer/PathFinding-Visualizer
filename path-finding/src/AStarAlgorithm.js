@@ -48,11 +48,12 @@ async function search(canCrossDiagonals) {
   const endCell = gridCl.endCell;
 
   startCell.parentCell = startCell;
+  startCell.opened = true;
   openHeap.add(startCell);
 
   var foundPath = false;
 
-  while (openHeap.lastHeapCellIndex >= 0) {
+  while (openHeap.lastHeapItemIndex >= 0) {
     if (searchVars.stopSearch) {
       searchVars.stopSearch = false;
       console.log("stopped search");

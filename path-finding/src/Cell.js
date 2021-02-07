@@ -12,9 +12,9 @@ export default class Cell {
   cellType = 0;
 
   // #region A* path finding
-  
+
   // the cost from this cell to the start cell
-  gCost = 0;
+  gCost = Number.MAX_SAFE_INTEGER;
   // the cost from this cell to the end cell
   hCost = 0;
 
@@ -24,8 +24,6 @@ export default class Cell {
 
   // the index in the heap
   heapIndex = -1;
-
-  dijkstraShortest = Number.MAX_VALUE;
 
   // the referenced parent cell for backtracking and finding the path
   parentCell = null;
@@ -82,9 +80,8 @@ export default class Cell {
         //return the comparison
         return comparison;
       case SEARCH_TYPES.DIJKSTRA:
-        comparison =
-          this.dijkstraShortest < cellToCompare.dijkstraShortest ? 1 : -1;
-        if (this.dijkstraShortest === cellToCompare.dijkstraShortest) {
+        comparison = this.gCost < cellToCompare.gCost ? 1 : -1;
+        if (this.gCost === cellToCompare.gCost) {
           comparison = 0;
         }
         return comparison;

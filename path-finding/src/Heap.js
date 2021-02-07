@@ -1,82 +1,82 @@
 export default class Heap {
-  /*The cell at the top of the heap has succeeded all the other cells and has the lowest fCost */
-  cells = [];
+  /*The item at the top of the heap has succeeded all the other items and has the lowest fCost */
+  items = [];
 
-  // the index of the last cell in the heap
-  lastHeapCellIndex = -1;
+  // the index of the last item in the heap
+  lastHeapItemIndex = -1;
 
   constructor(searchType) {
     this.searchType = searchType;
   }
 
-  contains(cell) {
-    // check if the heap includes a given cell
-    return this.cells.includes(cell);
+  contains(item) {
+    // check if the heap includes a given item
+    return this.items.includes(item);
   }
 
-  add(cell) {
-    this.lastHeapCellIndex++;
+  add(item) {
+    this.lastHeapItemIndex++;
 
-    // assign the heap index to be the last added cell index
-    cell.heapIndex = this.lastHeapCellIndex;
-    this.cells[this.lastHeapCellIndex] = cell;
-    this.sortUp(cell);
+    // assign the heap index to be the last added item index
+    item.heapIndex = this.lastHeapItemIndex;
+    this.items[this.lastHeapItemIndex] = item;
+    this.sortUp(item);
   }
 
   removeFirst() {
-    let firstCell = this.cells[0];
+    let firstCell = this.items[0];
 
-    // remove the last cell and make it the first
-    this.cells[0] = this.cells.pop();
+    // remove the last item and make it the first
+    this.items[0] = this.items.pop();
 
-    // change the (was last) cell's heapIndex to be 0
-    this.cells[0].heapIndex = 0;
+    // change the (was last) item's heapIndex to be 0
+    this.items[0].heapIndex = 0;
 
-    // since we popped a cell out the lastHeapCellIndex must be decremented
-    this.lastHeapCellIndex--;
+    // since we popped a item out the lastHeapItemIndex must be decremented
+    this.lastHeapItemIndex--;
 
-    //sort the top cell down the heap
-    this.sortDown(this.cells[0]);
+    //sort the top item down the heap
+    this.sortDown(this.items[0]);
 
     return firstCell;
   }
 
-  update(cell, sortUp) {
+  update(item, sortUp) {
     if (sortUp) {
-      this.sortUp(cell);
+      this.sortUp(item);
     } else {
-      this.sortDown(cell);
+      this.sortDown(item);
     }
   }
 
-  sortUp(cell) {
+  sortUp(item) {
     while (true) {
-      let parentIndex = Math.floor((cell.heapIndex - 1) / 2);
+      let parentIndex = Math.floor((item.heapIndex - 1) / 2);
       parentIndex = parentIndex < 0 ? 0 : parentIndex;
 
-      var parentCell = this.cells[parentIndex];
+      var parentCell = this.items[parentIndex];
 
-      // if the cell succeeds the parent cell
-      if (cell.compareTo(parentCell, this.searchType) > 0) {
-        // swap the cell and parent positions in the heap
-        this.swap(cell, parentCell);
+      // if the item succeeds the parent item
+      if (item.compareTo(parentCell, this.searchType) > 0) {
+        // swap the item and parent positions in the heap
+        this.swap(item, parentCell);
       } else {
         break;
       }
     }
   }
 
-  sortDown(cell) {
+  sortDown(item) {
     // #region Explanation
     /*
     A* algorithm example: 
     we continue swapping the given cell down through the heap.
 
     The goal is to place the cell in a position in the heap where
-    the parent cell is of a lower fCost and its children cells
+    the parent cell is of a lower fCost and its children items
     are of a higher fCost. 
     
-    To do this we check its children cells and make sure the swap index 
+    To do this we check its children items and make sure the swap index 
     references the child with the lowest fCost. This is because we only
     swap with a child that has a lower fCost then the given cell so it 
     makes it easier to just pick the lower fCost child.
@@ -89,22 +89,22 @@ export default class Heap {
     */
     //#endregion
     while (true) {
-      var leftChildIndex = Math.floor(cell.heapIndex * 2 + 1);
+      var leftChildIndex = Math.floor(item.heapIndex * 2 + 1);
       leftChildIndex = leftChildIndex < 0 ? 0 : leftChildIndex;
 
-      var rightChildIndex = Math.floor(cell.heapIndex * 2 + 2);
+      var rightChildIndex = Math.floor(item.heapIndex * 2 + 2);
       rightChildIndex = rightChildIndex < 0 ? 0 : rightChildIndex;
 
       // if the left child exists
-      if (leftChildIndex < this.cells.length) {
+      if (leftChildIndex < this.items.length) {
         var swapIndex = leftChildIndex;
 
         // if the right child exists
-        if (rightChildIndex < this.cells.length) {
+        if (rightChildIndex < this.items.length) {
           // if the right child succeeds the left child
           if (
-            this.cells[rightChildIndex].compareTo(
-              this.cells[leftChildIndex],
+            this.items[rightChildIndex].compareTo(
+              this.items[leftChildIndex],
               this.searchType
             ) > 0
           ) {
@@ -113,10 +113,10 @@ export default class Heap {
           }
         }
 
-        // if the cell precedes the cell to swap with
-        if (cell.compareTo(this.cells[swapIndex], this.searchType) < 0) {
-          // swap with the cell
-          this.swap(cell, this.cells[swapIndex]);
+        // if the item precedes the item to swap with
+        if (item.compareTo(this.items[swapIndex], this.searchType) < 0) {
+          // swap with the item
+          this.swap(item, this.items[swapIndex]);
         } else {
           return;
         }
@@ -126,15 +126,15 @@ export default class Heap {
     }
   }
 
-  swap(cellA, cellB) {
-    // swap the cells
-    this.cells[cellA.heapIndex] = cellB;
-    this.cells[cellB.heapIndex] = cellA;
+  swap(itemA, itemB) {
+    // swap the items
+    this.items[itemA.heapIndex] = itemB;
+    this.items[itemB.heapIndex] = itemA;
 
-    let item_A_index = cellA.heapIndex;
+    let item_A_index = itemA.heapIndex;
 
     // swap the indices
-    cellA.heapIndex = cellB.heapIndex;
-    cellB.heapIndex = item_A_index;
+    itemA.heapIndex = itemB.heapIndex;
+    itemB.heapIndex = item_A_index;
   }
 }

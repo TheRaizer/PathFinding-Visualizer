@@ -84,12 +84,14 @@ class GridCl {
           cell.closed = false;
           rerender = true;
         }
-        if (cell.cellType !== CELL_TYPES.EMPTY) {
+        if (
+          cell.cellType !== CELL_TYPES.EMPTY &&
+          cell.cellType !== CELL_TYPES.START &&
+          cell.cellType !== CELL_TYPES.END
+        ) {
           cell.cellType = CELL_TYPES.EMPTY;
           rerender = true;
         }
-        this.startCell = null;
-        this.endCell = null;
         if (rerender) {
           cell.setCellRerender((rerender) => !rerender);
         }
