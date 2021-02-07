@@ -64,6 +64,11 @@ async function search(canCrossDiagonals) {
 
   // continue looping until there is not unvisited cells
   while (unvisitedHeap.lastHeapCellIndex >= 0) {
+    if (searchVars.stopSearch) {
+      searchVars.stopSearch = false;
+      console.log("stopped search");
+      return;
+    }
     // check certain neigbours depending on if it can cross diagonals or not
     if (canCrossDiagonals) {
       neighbours = gridCl.getMooreNeighbours(currentCell.x, currentCell.y);

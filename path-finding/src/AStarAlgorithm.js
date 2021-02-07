@@ -53,6 +53,11 @@ async function search(canCrossDiagonals) {
   var foundPath = false;
 
   while (openHeap.lastHeapCellIndex >= 0) {
+    if (searchVars.stopSearch) {
+      searchVars.stopSearch = false;
+      console.log("stopped search");
+      return;
+    }
     const currentCell = openHeap.removeFirst();
 
     if (currentCell === endCell) {

@@ -44,6 +44,15 @@ function Header() {
           </button>
           <button onClick={gridCl.clearEntireGrid}>Clear Entire Grid</button>
           <button onClick={gridCl.clearWalls}>Clear Walls</button>
+          <button
+            onClick={() => {
+              if (searchVars.isSearching) {
+                searchVars.stopSearch = true;
+              }
+            }}
+          >
+            Stop Search
+          </button>
         </Col>
         <Col>
           <input
