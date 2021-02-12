@@ -6,9 +6,6 @@ export const CELL_TYPES = {
   START: 1,
   END: 2,
   OBSTACLE: 3,
-  OPENED: 4,
-  CLOSED: 5,
-  IS_ON_PATH: 6,
 };
 
 export const isFinishOrStart = (evt, cell) => {

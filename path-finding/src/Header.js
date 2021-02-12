@@ -3,6 +3,7 @@ import { Alert, Col, Container, Row } from "react-bootstrap";
 import AStarPathFind from "./AStarAlgorithm";
 import DijkstrasPathFind from "./DijkstrasAlgorithm";
 import BreadthFirstSearch from "./BreadthFirstSearch";
+import CreateMaze from "./RecursiveDivision";
 import { searchVars } from "./Search";
 import { gridCl } from "./Grid";
 import "./header.css";
@@ -18,6 +19,7 @@ function Header() {
         <Col>Ctrl Click: set start cell</Col>
         <Col>Alt Click: set end cell</Col>
         <Col>
+          <button onClick={CreateMaze}>Create Maze</button>
           <button
             onClick={() => {
               if (gridCl.startCell != null && gridCl.endCell != null) {
@@ -53,7 +55,15 @@ function Header() {
           </button>
         </Col>
         <Col>
-          <button onClick={gridCl.clearEntireGrid}>Clear Entire Grid</button>
+          <button
+            onClick={() => {
+              if (!searchVars.isSearching) {
+                gridCl.clearEntireGrid();
+              }
+            }}
+          >
+            Clear Entire Grid
+          </button>
           <button onClick={gridCl.clearWalls}>Clear Walls</button>
           <button
             onClick={() => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { isFinishOrStart, determineCellType } from "./CellActions";
+import { isFinishOrStart, determineCellType, CELL_TYPES } from "./CellActions";
 import { SEARCH_TYPES } from "./Search";
 import "./cell.css";
 
@@ -8,8 +8,7 @@ export default class Cell {
   isOnPath = false;
   opened = false;
   closed = false;
-  // 0 = empty / 1 = start / 2 = end / 3 = obstacle
-  cellType = 0;
+  cellType = CELL_TYPES.EMPTY;
 
   // #region A* path finding
 
@@ -39,13 +38,13 @@ export default class Cell {
       this.cellType !== 0
     ) {
       switch (this.cellType) {
-        case 0:
+        case CELL_TYPES.EMPTY:
           return "rgba(221, 221, 221, 0.603)";
-        case 1:
+        case CELL_TYPES.START:
           return "green";
-        case 2:
+        case CELL_TYPES.END:
           return "red";
-        case 3:
+        case CELL_TYPES.OBSTACLE:
           return "black";
         default:
           throw new Error("Out of range exception");

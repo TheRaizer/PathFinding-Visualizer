@@ -1,6 +1,7 @@
 import React from "react";
 import Cell, { CellSquareState } from "./Cell";
 import { CELL_TYPES } from "./CellActions";
+import { timer } from "./UtilityFuncs";
 import "./grid.css";
 
 class GridCl {
@@ -148,6 +149,27 @@ class GridCl {
     }
 
     return 14 * dstX + 10 * (dstY - dstX);
+  }
+
+  outlineGrid(animTime) {
+    return new Promise((resolve) => resolve(this.outLine(animTime)));
+  }
+  async outLine(animTime) {
+    for (let y = 0; y < this.maxY; y++) {
+      this.grid[y][0].cellType = CELL_TYPES.OBSTACLE;
+      this.grid[y][0].setCellRerender((rerender) => !rerender);
+      this.grid[y][this.maxX - 1].cellType = CELL_TYPES.OBSTACLE;
+      this.grid[y][this.maxX - 1].setCellRerender((rerender) => !rerender);
+      await timer(animTime);
+    }
+    for (let x = 0; x < this.maxX; x++) {
+      this.grid[0][x].cellType = CELL_TYPES.OBSTACLE;
+      this.grid[0][x].setCellRerender((rerender) => !rerender);
+
+      this.grid[this.maxY - 1][x].cellType = CELL_TYPES.OBSTACLE;
+      this.grid[this.maxY - 1][x].setCellRerender((rerender) => !rerender);
+      await timer(animTime);
+    }
   }
 }
 
