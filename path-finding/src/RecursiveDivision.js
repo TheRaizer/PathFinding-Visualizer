@@ -1,4 +1,4 @@
-import { rnd, timer } from "./UtilityFuncs";
+import { rndEven, rndOdd, timer } from "./UtilityFuncs";
 import { gridCl } from "./Grid";
 import { CELL_TYPES } from "./CellActions";
 
@@ -182,11 +182,11 @@ function choosePassage(
   var yPassageIdx = 0;
 
   if (isHorizontalCut) {
-    xPassageIdx = rnd(leftBound, rightBound);
+    xPassageIdx = rndEven(leftBound, rightBound);
     yPassageIdx = upperBound;
   } else {
     xPassageIdx = leftBound;
-    yPassageIdx = rnd(upperBound, lowerBound);
+    yPassageIdx = rndEven(upperBound, lowerBound);
   }
 
   return { xPassageIdx, yPassageIdx };
@@ -203,9 +203,9 @@ function findStart(
   var yStartIdx = 0;
   if (isHorizontalCut) {
     xStartIdx = leftBound;
-    yStartIdx = rnd(upperBound + 1, lowerBound - 1);
+    yStartIdx = rndOdd(upperBound + 1, lowerBound - 1);
   } else {
-    xStartIdx = rnd(leftBound + 1, rightBound - 1);
+    xStartIdx = rndOdd(leftBound + 1, rightBound - 1);
     yStartIdx = upperBound;
   }
 
