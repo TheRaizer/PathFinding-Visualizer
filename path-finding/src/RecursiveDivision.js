@@ -183,12 +183,14 @@ function findStart(
   var yStartIdx = 0;
   if (isHorizontalCut) {
     xStartIdx = leftBound;
-    /* a horiz wall needs to be on any random EVEN column because the lower bound - 1 is ODD
-    with a grid whose Y-axis length is ODD and an outline of 1 is applied */
+    /* a horiz wall needs to be on any random EVEN column because the lowerBound - 1 and
+    upperBound + 1 are both EVEN inclusive ranges with a grid whose Y-axis length is ODD
+    and an outline of 1 is applied */
     yStartIdx = rndEven(upperBound + 1, lowerBound - 1);
   } else {
-    /* a vert wall needs to be on any random EVEN row because the rightBound bound - 1 is ODD 
-    with a grid whose X-axis length is ODD and an outline of 1 is applied */
+    /* a vert wall needs to be on any random EVEN row because the rightBound - 1 and
+    leftBound + 1 are both EVEN inclusive ranges with a grid whose X-axis length is 
+    ODD and an outline of 1 is applied */
     xStartIdx = rndEven(leftBound + 1, rightBound - 1);
     yStartIdx = upperBound;
   }
