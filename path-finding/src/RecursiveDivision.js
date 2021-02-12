@@ -19,8 +19,8 @@ function startDivision() {
       divide(
         1,
         1,
-        gridCl.maxX - 2, // rightBound needs to be index based
-        gridCl.maxY - 2, // lowerBound needs to be index based
+        gridCl.maxX - 2, // -1 to make it indexed base and -1 again to add an outline of 1
+        gridCl.maxY - 2,
         chooseOrientation(1, 1, gridCl.maxX - 2, gridCl.maxY - 2)
       )
     );
@@ -28,6 +28,7 @@ function startDivision() {
 }
 
 function chooseOrientation(leftBound, upperBound, rightBound, lowerBound) {
+  // if the horizontal space is greater than the vertical cut vertically vice-versa
   const horizSpace = rightBound - leftBound;
   const vertSpace = lowerBound - upperBound;
   if (horizSpace > vertSpace) {
@@ -46,26 +47,8 @@ async function divide(
   upperBound,
   rightBound,
   lowerBound,
-  orientation,
-  cameFrom
+  orientation
 ) {
-  console.log(
-    "rightBound: " +
-      rightBound +
-      " || lowerBound: " +
-      lowerBound +
-      " || left bound: " +
-      leftBound +
-      " || upper bound: " +
-      upperBound +
-      " || cameFrom X: " +
-      cameFrom?.x +
-      " || cameFrom Y: " +
-      cameFrom?.y +
-      " || orientation: " +
-      orientation
-  );
-
   if (rightBound - leftBound < 2 || lowerBound - upperBound < 2) {
     return;
   }
@@ -110,8 +93,7 @@ async function divide(
       upperBound,
       rightBound,
       yStartIdx - 1,
-      chooseOrientation(leftBound, upperBound, rightBound, yStartIdx - 1),
-      { x: xStartIdx, y: yStartIdx }
+      chooseOrientation(leftBound, upperBound, rightBound, yStartIdx - 1)
     );
     // bottom section
     divide(
@@ -119,8 +101,7 @@ async function divide(
       yStartIdx + 1,
       rightBound,
       lowerBound,
-      chooseOrientation(leftBound, yStartIdx + 1, rightBound, lowerBound),
-      { x: xStartIdx, y: yStartIdx }
+      chooseOrientation(leftBound, yStartIdx + 1, rightBound, lowerBound)
     );
   } else {
     // left section
@@ -129,8 +110,7 @@ async function divide(
       upperBound,
       xStartIdx - 1,
       lowerBound,
-      chooseOrientation(leftBound, upperBound, xStartIdx - 1, lowerBound),
-      { x: xStartIdx, y: yStartIdx }
+      chooseOrientation(leftBound, upperBound, xStartIdx - 1, lowerBound)
     );
 
     // right section
@@ -139,8 +119,7 @@ async function divide(
       upperBound,
       rightBound,
       lowerBound,
-      chooseOrientation(xStartIdx + 1, upperBound, rightBound, lowerBound),
-      { x: xStartIdx, y: yStartIdx }
+      chooseOrientation(xStartIdx + 1, upperBound, rightBound, lowerBound)
     );
   }
 }
@@ -181,12 +160,13 @@ function choosePassage(
   var xPassageIdx = 0;
   var yPassageIdx = 0;
 
+  // must be any odd number between a range because walls are created on even numbers
   if (isHorizontalCut) {
-    xPassageIdx = rndEven(leftBound, rightBound);
+    xPassageIdx = rndOdd(leftBound, rightBound);
     yPassageIdx = upperBound;
   } else {
     xPassageIdx = leftBound;
-    yPassageIdx = rndEven(upperBound, lowerBound);
+    yPassageIdx = rndOdd(upperBound, lowerBound);
   }
 
   return { xPassageIdx, yPassageIdx };
@@ -203,9 +183,13 @@ function findStart(
   var yStartIdx = 0;
   if (isHorizontalCut) {
     xStartIdx = leftBound;
-    yStartIdx = rndOdd(upperBound + 1, lowerBound - 1);
+    /* a horiz wall needs to be on any random EVEN column because the lower bound - 1 is ODD
+    with a grid whose Y-axis length is ODD and an outline of 1 is applied */
+    yStartIdx = rndEven(upperBound + 1, lowerBound - 1);
   } else {
-    xStartIdx = rndOdd(leftBound + 1, rightBound - 1);
+    /* a vert wall needs to be on any random EVEN row because the rightBound bound - 1 is ODD 
+    with a grid whose X-axis length is ODD and an outline of 1 is applied */
+    xStartIdx = rndEven(leftBound + 1, rightBound - 1);
     yStartIdx = upperBound;
   }
 

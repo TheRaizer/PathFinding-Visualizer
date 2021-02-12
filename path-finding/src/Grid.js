@@ -8,8 +8,8 @@ class GridCl {
   grid = [];
   startCell = null;
   endCell = null;
-  maxY = 20;
-  maxX = 48;
+  maxY = 21;
+  maxX = 49;
 
   constructor() {
     this.initGrid();
