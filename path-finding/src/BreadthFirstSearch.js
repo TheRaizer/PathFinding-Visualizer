@@ -1,12 +1,13 @@
 import { searchVars, retracePath } from "./Search";
 import { timer } from "./UtilityFuncs";
+import { mazeVars } from "./Maze";
 import { gridCl } from "./Grid";
 import { CELL_TYPES } from "./CellActions";
 import Queue from "./Queue";
 
 export default async function BreadthFirstSearch(canCrossDiagonals) {
   // lock the async function so it can only run one at a time
-  if (searchVars.isSearching) {
+  if (searchVars.isSearching || mazeVars.isCreatingMaze) {
     console.log("already searching");
     return;
   }

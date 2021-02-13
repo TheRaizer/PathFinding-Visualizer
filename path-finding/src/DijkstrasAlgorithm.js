@@ -1,12 +1,13 @@
 import { searchVars, retracePath, SEARCH_TYPES } from "./Search";
 import { timer } from "./UtilityFuncs";
 import { gridCl } from "./Grid";
+import { mazeVars } from "./Maze";
 import { CELL_TYPES } from "./CellActions";
 import Heap from "./Heap";
 
 export default async function DijkstrasPathFind(canCrossDiagonals) {
   // lock the async function so it can only run one at a time
-  if (searchVars.isSearching) {
+  if (searchVars.isSearching || mazeVars.isCreatingMaze) {
     console.log("already searching");
     return;
   }

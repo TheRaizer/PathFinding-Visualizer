@@ -1,5 +1,7 @@
 import { rndEven, rndOdd, timer } from "./UtilityFuncs";
 import { gridCl } from "./Grid";
+import { searchVars } from "./Search";
+import { mazeVars } from "./Maze";
 import { CELL_TYPES } from "./CellActions";
 
 const ORIENTATIONS = {
@@ -8,9 +10,13 @@ const ORIENTATIONS = {
 };
 
 export default async function CreateMaze() {
-  gridCl.clearEntireGrid();
-  await gridCl.outlineGrid(15);
-  await startDivision();
+  if (!mazeVars.isCreatingMaze && !searchVars.isSearching) {
+    mazeVars.isCreatingMaze = true;
+    gridCl.clearEntireGrid();
+    await gridCl.outlineGrid(1);
+    await startDivision();
+    mazeVars.isCreatingMaze = false;
+  }
 }
 
 function startDivision() {
@@ -70,7 +76,6 @@ async function divide(
     rightBound,
     lowerBound
   );
-  console.log("Start Wall at X: " + xStartIdx + " Y: " + yStartIdx);
   var wallDist = isHorizontalCut
     ? rightBound - leftBound
     : lowerBound - upperBound;
@@ -88,7 +93,7 @@ async function divide(
 
   if (isHorizontalCut) {
     // top section
-    divide(
+    await divide(
       leftBound,
       upperBound,
       rightBound,
@@ -96,7 +101,7 @@ async function divide(
       chooseOrientation(leftBound, upperBound, rightBound, yStartIdx - 1)
     );
     // bottom section
-    divide(
+    await divide(
       leftBound,
       yStartIdx + 1,
       rightBound,
@@ -105,7 +110,7 @@ async function divide(
     );
   } else {
     // left section
-    divide(
+    await divide(
       leftBound,
       upperBound,
       xStartIdx - 1,
@@ -114,7 +119,7 @@ async function divide(
     );
 
     // right section
-    divide(
+    await divide(
       xStartIdx + 1,
       upperBound,
       rightBound,
@@ -146,7 +151,7 @@ async function drawWall(
     gridCl.grid[yWallIdx][xWallIdx].setCellRerender((rerender) => !rerender);
     xWallIdx += dirX;
     yWallIdx += dirY;
-    await timer(15);
+    await timer(1);
   }
 }
 

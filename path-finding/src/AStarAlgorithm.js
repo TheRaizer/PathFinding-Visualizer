@@ -2,12 +2,13 @@ import Heap from "./Heap";
 import { gridCl } from "./Grid";
 import { CELL_TYPES } from "./CellActions";
 import { searchVars, retracePath } from "./Search";
+import { mazeVars } from "./Maze";
 import { SEARCH_TYPES } from "./Search";
 import { timer } from "./UtilityFuncs";
 
 export default async function AStarPathFind(canCrossDiagonals) {
   // lock the async function so it can only run one at a time
-  if (searchVars.isSearching) {
+  if (searchVars.isSearching || mazeVars.isCreatingMaze) {
     console.log("already searching");
     return;
   }
