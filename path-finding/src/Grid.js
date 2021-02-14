@@ -1,6 +1,6 @@
 import React from "react";
 import Cell, { CellSquareState } from "./Cell";
-import { CELL_TYPES } from "./CellActions";
+import { CELL_TYPES, cellIsStartOrEnd } from "./CellActions";
 import { timer } from "./UtilityFuncs";
 import "./grid.css";
 
@@ -101,8 +101,13 @@ class GridCl {
   };
 
   resetForSearch() {
-    return new Promise((resolve) => {
-      resolve(this.resetCellsForSearch());
+    return new Promise((resolve, reject) => {
+      resolve(
+        this.resetCellsForSearch().catch((err) => {
+          console.log(err);
+          reject(err);
+        })
+      );
     });
   }
 
@@ -152,22 +157,36 @@ class GridCl {
   }
 
   outlineGrid(animTime) {
-    return new Promise((resolve) => resolve(this.outLine(animTime)));
+    return new Promise((resolve, reject) =>
+      resolve(
+        this.outLine(animTime).catch((err) => {
+          console.log(err);
+          reject(err);
+        })
+      )
+    );
   }
   async outLine(animTime) {
     for (let y = 0; y < this.maxY; y++) {
-      this.grid[y][0].cellType = CELL_TYPES.OBSTACLE;
-      this.grid[y][0].setCellRerender((rerender) => !rerender);
-      this.grid[y][this.maxX - 1].cellType = CELL_TYPES.OBSTACLE;
-      this.grid[y][this.maxX - 1].setCellRerender((rerender) => !rerender);
+      if (!cellIsStartOrEnd(0, y)) {
+        this.grid[y][0].cellType = CELL_TYPES.OBSTACLE;
+        this.grid[y][0].setCellRerender((rerender) => !rerender);
+      }
+      if (!cellIsStartOrEnd(this.maxX - 1, y)) {
+        this.grid[y][this.maxX - 1].cellType = CELL_TYPES.OBSTACLE;
+        this.grid[y][this.maxX - 1].setCellRerender((rerender) => !rerender);
+      }
       await timer(animTime);
     }
     for (let x = 0; x < this.maxX; x++) {
-      this.grid[0][x].cellType = CELL_TYPES.OBSTACLE;
-      this.grid[0][x].setCellRerender((rerender) => !rerender);
-
-      this.grid[this.maxY - 1][x].cellType = CELL_TYPES.OBSTACLE;
-      this.grid[this.maxY - 1][x].setCellRerender((rerender) => !rerender);
+      if (!cellIsStartOrEnd(x, 0)) {
+        this.grid[0][x].cellType = CELL_TYPES.OBSTACLE;
+        this.grid[0][x].setCellRerender((rerender) => !rerender);
+      }
+      if (!cellIsStartOrEnd(x, this.maxY - 1)) {
+        this.grid[this.maxY - 1][x].cellType = CELL_TYPES.OBSTACLE;
+        this.grid[this.maxY - 1][x].setCellRerender((rerender) => !rerender);
+      }
       await timer(animTime);
     }
   }

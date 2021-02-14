@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { isFinishOrStart, determineCellType, CELL_TYPES } from "./CellActions";
+import {
+  assignFinishOrStart,
+  determineCellType,
+  CELL_TYPES,
+} from "./CellActions";
 import { SEARCH_TYPES } from "./Search";
 import "./cell.css";
 
@@ -126,7 +130,7 @@ function CellSquare({ state }) {
         cellTypeOnMouseDown = cell.cellType;
         determineCellType(evt, true, cellTypeOnMouseDown, cell);
       }}
-      onClick={(evt) => isFinishOrStart(evt, cell)}
+      onClick={(evt) => assignFinishOrStart(evt, cell)}
     >
       <p>{/* X: {cell.x} Y: {cell.y} */}</p>
     </div>

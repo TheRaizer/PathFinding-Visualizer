@@ -8,7 +8,7 @@ export const CELL_TYPES = {
   OBSTACLE: 3,
 };
 
-export const isFinishOrStart = (evt, cell) => {
+export const assignFinishOrStart = (evt, cell) => {
   if (evt.altKey) {
     // if the cell is the end cell
     if (cell.cellType === CELL_TYPES.END) {
@@ -53,6 +53,13 @@ export const isFinishOrStart = (evt, cell) => {
   }
 };
 
+export const cellIsStartOrEnd = (posX, posY) => {
+  return (
+    gridCl.grid[posY][posX] === gridCl.startCell ||
+    gridCl.grid[posY][posX] === gridCl.endCell
+  );
+};
+
 export const determineCellType = (
   evt,
   mouseDown,
@@ -66,7 +73,7 @@ export const determineCellType = (
         ? CELL_TYPES.OBSTACLE
         : CELL_TYPES.EMPTY;
     if (cell.cellType !== cellType && !evt.altKey && !evt.ctrlKey) {
-      if (cell === gridCl.endCell || cell === gridCl.startCell) {
+      if (cellIsStartOrEnd(cell.x, cell.y)) {
         return;
       }
       if ((cell.closed || cell.opened) && searchVars.isSearching) {

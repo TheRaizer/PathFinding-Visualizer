@@ -6,6 +6,7 @@ import BreadthFirstSearch from "./BreadthFirstSearch";
 import CreateMaze from "./RecursiveDivision";
 import { searchVars } from "./Search";
 import { gridCl } from "./Grid";
+import { mazeVars } from "./Maze";
 import "./header.css";
 
 function Header() {
@@ -57,14 +58,22 @@ function Header() {
         <Col>
           <button
             onClick={() => {
-              if (!searchVars.isSearching) {
+              if (!searchVars.isSearching && !mazeVars.isCreatingMaze) {
                 gridCl.clearEntireGrid();
               }
             }}
           >
             Clear Entire Grid
           </button>
-          <button onClick={gridCl.clearWalls}>Clear Walls</button>
+          <button
+            onClick={() => {
+              if (!mazeVars.isCreatingMaze) {
+                gridCl.clearWalls();
+              }
+            }}
+          >
+            Clear Walls
+          </button>
           <button
             onClick={() => {
               if (searchVars.isSearching) {

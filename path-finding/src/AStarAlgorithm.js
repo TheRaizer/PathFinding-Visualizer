@@ -14,26 +14,31 @@ export default async function AStarPathFind(canCrossDiagonals) {
   }
   searchVars.isSearching = true;
   //search for the path
-  const path = await searching(canCrossDiagonals);
-  if (path == null) {
-    console.log("no path");
-    searchVars.isSearching = false;
-    return;
-  }
-  //draw the path
-  for (let i = 0; i < path.length; i++) {
-    const cell = path[i];
-    cell.isOnPath = true;
-    cell.setCellRerender((rerender) => !rerender);
-    await timer(searchVars.pathAnimationTime);
-  }
-
+  await searching(canCrossDiagonals).then(async (path) => {
+    if (path == null) {
+      console.log("no path");
+      searchVars.isSearching = false;
+      return;
+    }
+    //draw the path
+    for (let i = 0; i < path.length; i++) {
+      const cell = path[i];
+      cell.isOnPath = true;
+      cell.setCellRerender((rerender) => !rerender);
+      await timer(searchVars.pathAnimationTime);
+    }
+  });
   searchVars.isSearching = false;
 }
 
 function searching(canCrossDiagonals) {
-  return new Promise((resolve) => {
-    resolve(search(canCrossDiagonals));
+  return new Promise((resolve, reject) => {
+    resolve(
+      search(canCrossDiagonals).catch((err) => {
+        console.log(err);
+        reject(err);
+      })
+    );
   });
 }
 

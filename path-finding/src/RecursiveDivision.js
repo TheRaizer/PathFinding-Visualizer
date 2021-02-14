@@ -2,6 +2,7 @@ import { rndEven, rndOdd, timer } from "./UtilityFuncs";
 import { gridCl } from "./Grid";
 import { searchVars } from "./Search";
 import { mazeVars } from "./Maze";
+import { cellIsStartOrEnd } from "./CellActions";
 import { CELL_TYPES } from "./CellActions";
 
 const ORIENTATIONS = {
@@ -13,14 +14,16 @@ export default async function CreateMaze() {
   if (!mazeVars.isCreatingMaze && !searchVars.isSearching) {
     mazeVars.isCreatingMaze = true;
     gridCl.clearEntireGrid();
-    await gridCl.outlineGrid(1);
-    await startDivision();
-    mazeVars.isCreatingMaze = false;
+    await gridCl.outlineGrid(1).then(() => {
+      startDivision().then(() => {
+        mazeVars.isCreatingMaze = false;
+      });
+    });
   }
 }
 
 function startDivision() {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     resolve(
       divide(
         1,
@@ -28,7 +31,10 @@ function startDivision() {
         gridCl.maxX - 2, // -1 to make it indexed base and -1 again to add an outline of 1
         gridCl.maxY - 2,
         chooseOrientation(1, 1, gridCl.maxX - 2, gridCl.maxY - 2)
-      )
+      ).catch((err) => {
+        console.log(err);
+        reject(err);
+      })
     );
   });
 }
@@ -142,7 +148,11 @@ async function drawWall(
   var yWallIdx = yStartIdx;
 
   for (let i = 0; i <= wallDist; i++) {
-    if (xWallIdx === xPassageIdx || yWallIdx === yPassageIdx) {
+    if (
+      xWallIdx === xPassageIdx ||
+      yWallIdx === yPassageIdx ||
+      cellIsStartOrEnd(xWallIdx, yWallIdx)
+    ) {
       xWallIdx += dirX;
       yWallIdx += dirY;
       continue;
