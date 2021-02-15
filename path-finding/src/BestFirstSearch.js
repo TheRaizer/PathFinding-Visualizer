@@ -5,7 +5,7 @@ import { mazeVars } from "./Maze";
 import { CELL_TYPES } from "./CellActions";
 import Heap from "./Heap";
 
-export default async function DijkstrasPathFind(canCrossDiagonals) {
+export default async function BestFirstSearch(canCrossDiagonals) {
   // lock the async function so it can only run one at a time
   if (searchVars.isSearching || mazeVars.isCreatingMaze) {
     console.log("already searching");
@@ -54,18 +54,20 @@ async function search(canCrossDiagonals) {
   const endCell = gridCl.endCell;
 
   //create a heap of unvisited cells
-  const unvisitedHeap = new Heap(SEARCH_TYPES.DIJKSTRA);
+  const unvisitedHeap = new Heap(SEARCH_TYPES.BEST_FIRST);
   // initialize the heap with all the cells as they all start unvisited
   await initHeap(unvisitedHeap);
 
   // the parent cell of the start cell is itself for retracing purposes
   startCell.parentCell = startCell;
   startCell.opened = true;
+
   // the start cell has a cost of 0
-  startCell.gCost = 0;
+  startCell.hCost = gridCl.calculateDistance(startCell, endCell);
   unvisitedHeap.update(startCell, true);
 
   var currentCell = unvisitedHeap.removeFirst();
+
   var neighbours = [];
 
   // continue looping until there is not unvisited cells
@@ -83,7 +85,9 @@ async function search(canCrossDiagonals) {
     }
 
     // filter out any visited neighbours
-    const unVisitedNeighbours = neighbours.filter((x) => !x.closed);
+    const unVisitedNeighbours = neighbours.filter(
+      (x) => !x.closed && !x.opened
+    );
 
     let tempCurrentCell = currentCell;
 
@@ -91,26 +95,18 @@ async function search(canCrossDiagonals) {
     unVisitedNeighbours.forEach((neighbour) => {
       // only check if neighbour is not an obstacle
       if (neighbour.cellType !== CELL_TYPES.OBSTACLE) {
-        // calculate the new distance to the neighbour using the distance from the curr to the start plus the distance from the curr to the neighbour
-        const newDistanceFromStartToNeighbour =
-          tempCurrentCell.gCost +
-          gridCl.calculateDistance(tempCurrentCell, neighbour);
+        // assign the new shortest distance
+        neighbour.hCost = gridCl.calculateDistance(neighbour, endCell);
 
-        // if the newDistanceFromStartToNeighbour is smaller then the current shortest
-        if (neighbour.gCost > newDistanceFromStartToNeighbour) {
-          // assign the new shortest distance
-          neighbour.gCost = newDistanceFromStartToNeighbour;
+        // assign the parent cell of the neighbour to be the curr
+        neighbour.parentCell = tempCurrentCell;
 
-          // assign the parent cell of the neighbour to be the curr
-          neighbour.parentCell = tempCurrentCell;
+        // the neighbour has been opened so rerender
+        neighbour.opened = true;
+        neighbour.setCellRerender((rerender) => !rerender);
 
-          // the neighbour has been opened so rerender
-          neighbour.opened = true;
-          neighbour.setCellRerender((rerender) => !rerender);
-
-          // update its position in the heap
-          unvisitedHeap.update(neighbour, true);
-        }
+        // update its position in the heap
+        unvisitedHeap.update(neighbour, true);
       }
     });
 
@@ -132,7 +128,7 @@ async function search(canCrossDiagonals) {
       return path;
     }
     // if after picking new distances for neighbours the lowest distance cell is still max value it means there is no path.
-    if (currentCell.gCost === Number.MAX_SAFE_INTEGER) {
+    if (currentCell.hCost === Number.MAX_SAFE_INTEGER) {
       break;
     }
   }
@@ -144,7 +140,7 @@ function initHeap(heap) {
     resolve(
       gridCl.grid.forEach((row) =>
         row.forEach((cell) => {
-          cell.gCost = Number.MAX_SAFE_INTEGER;
+          cell.hCost = Number.MAX_SAFE_INTEGER;
           heap.add(cell);
         })
       )

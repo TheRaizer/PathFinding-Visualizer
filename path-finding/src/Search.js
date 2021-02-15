@@ -1,6 +1,7 @@
 export const SEARCH_TYPES = {
   A_STAR: "A*",
   DIJKSTRA: "DIJKSTRA",
+  BEST_FIRST: "BEST_FIRST",
 };
 
 export const searchVars = {

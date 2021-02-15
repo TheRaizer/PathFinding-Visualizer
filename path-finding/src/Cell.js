@@ -88,6 +88,12 @@ export default class Cell {
           comparison = 0;
         }
         return comparison;
+      case SEARCH_TYPES.BEST_FIRST:
+        comparison = this.hCost < cellToCompare.hCost ? 1 : -1;
+        if (this.hCost === cellToCompare.hCost) {
+          comparison = 0;
+        }
+        return comparison;
       default:
         throw new Error("No proper search type given");
     }

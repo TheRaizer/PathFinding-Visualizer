@@ -3,6 +3,7 @@ import { Alert, Col, Container, Row } from "react-bootstrap";
 import AStarPathFind from "./AStarAlgorithm";
 import DijkstrasPathFind from "./DijkstrasAlgorithm";
 import BreadthFirstSearch from "./BreadthFirstSearch";
+import BestFirstSearch from "./BestFirstSearch";
 import CreateMaze from "./RecursiveDivision";
 import { searchVars } from "./Search";
 import { gridCl } from "./Grid";
@@ -15,11 +16,13 @@ function Header() {
   const [missingCell, setMissingCell] = useState(false);
 
   return (
-    <Container id="header" className="py-5" fluid>
+    <Container id="header" className="py-4" fluid>
       <Row>
-        <Col>Ctrl Click: set start cell</Col>
-        <Col>Alt Click: set end cell</Col>
-        <Col>
+        <Col xs={2}>
+          <p>Ctrl Click: set start cell</p>
+          <p>Alt Click: set end cell</p>
+        </Col>
+        <Col xs={4}>
           <button onClick={CreateMaze}>Create Maze</button>
           <button
             onClick={() => {
@@ -53,6 +56,17 @@ function Header() {
             }}
           >
             Breadth First Search
+          </button>
+          <button
+            onClick={() => {
+              if (gridCl.startCell != null && gridCl.endCell != null) {
+                BestFirstSearch(canCrossDiagonals, animationInterval);
+              } else {
+                setMissingCell(true);
+              }
+            }}
+          >
+            Best First Search
           </button>
         </Col>
         <Col>
