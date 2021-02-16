@@ -1,10 +1,10 @@
-import Heap from "./Heap";
-import { gridCl } from "./Grid";
-import { CELL_TYPES } from "./CellActions";
-import { searchVars, retracePath } from "./Search";
-import { mazeVars } from "./Maze";
-import { SEARCH_TYPES } from "./Search";
-import { timer } from "./UtilityFuncs";
+import Heap from "../DataStructures/Heap";
+import { gridCl } from "../Grid/Grid";
+import { CELL_TYPES } from "../Cell/CellActions";
+import { searchVars, retracePath } from "../Search";
+import { mazeVars } from "../Maze";
+import { SEARCH_TYPES } from "../Search";
+import { timer } from "../UtilityFuncs";
 
 export default async function AStarPathFind(canCrossDiagonals) {
   // lock the async function so it can only run one at a time

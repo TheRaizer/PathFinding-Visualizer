@@ -4,7 +4,7 @@ import {
   determineCellType,
   CELL_TYPES,
 } from "./CellActions";
-import { SEARCH_TYPES } from "./Search";
+import { SEARCH_TYPES } from "../Search";
 import "./cell.css";
 
 export default class Cell {

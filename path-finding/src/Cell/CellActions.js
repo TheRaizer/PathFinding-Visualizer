@@ -1,5 +1,5 @@
-import { gridCl } from "./Grid";
-import { searchVars } from "./Search";
+import { gridCl } from "../Grid/Grid";
+import { searchVars } from "../Search";
 
 export const CELL_TYPES = {
   EMPTY: 0,

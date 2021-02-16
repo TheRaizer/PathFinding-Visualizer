@@ -1,7 +1,7 @@
 import React from "react";
-import Cell, { CellSquareState } from "./Cell";
-import { CELL_TYPES, cellIsStartOrEnd } from "./CellActions";
-import { timer } from "./UtilityFuncs";
+import Cell, { CellSquareState } from "../Cell/Cell";
+import { CELL_TYPES, cellIsStartOrEnd } from "../Cell/CellActions";
+import { timer } from "../UtilityFuncs";
 import "./grid.css";
 
 class GridCl {

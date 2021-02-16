@@ -1,9 +1,9 @@
-import { searchVars, retracePath, SEARCH_TYPES } from "./Search";
-import { timer } from "./UtilityFuncs";
-import { gridCl } from "./Grid";
-import { mazeVars } from "./Maze";
-import { CELL_TYPES } from "./CellActions";
-import Heap from "./Heap";
+import { searchVars, retracePath, SEARCH_TYPES } from "../Search";
+import { timer } from "../UtilityFuncs";
+import { gridCl } from "../Grid/Grid";
+import { mazeVars } from "../Maze";
+import { CELL_TYPES } from "../Cell/CellActions";
+import Heap from "../DataStructures/Heap";
 
 export default async function BestFirstSearch(canCrossDiagonals) {
   // lock the async function so it can only run one at a time

@@ -1,9 +1,9 @@
-import { rndEven, rndOdd, timer } from "./UtilityFuncs";
-import { gridCl } from "./Grid";
-import { searchVars } from "./Search";
-import { mazeVars } from "./Maze";
-import { cellIsStartOrEnd } from "./CellActions";
-import { CELL_TYPES } from "./CellActions";
+import { rndEven, rndOdd, timer } from "../UtilityFuncs";
+import { gridCl } from "../Grid/Grid";
+import { searchVars } from "../Search";
+import { mazeVars } from "../Maze";
+import { cellIsStartOrEnd } from "../Cell/CellActions";
+import { CELL_TYPES } from "../Cell/CellActions";
 
 const ORIENTATIONS = {
   HORIZONTAL: "HORIZONTAL",

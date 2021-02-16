@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Alert, Col, Container, Row } from "react-bootstrap";
-import AStarPathFind from "./AStarAlgorithm";
-import DijkstrasPathFind from "./DijkstrasAlgorithm";
-import BreadthFirstSearch from "./BreadthFirstSearch";
-import BestFirstSearch from "./BestFirstSearch";
-import CreateMaze from "./RecursiveDivision";
-import { searchVars } from "./Search";
-import { gridCl } from "./Grid";
-import { mazeVars } from "./Maze";
+import AStarPathFind from "../PathFindingAlgos/AStarAlgorithm";
+import DijkstrasPathFind from "../PathFindingAlgos/DijkstrasAlgorithm";
+import BreadthFirstSearch from "../PathFindingAlgos/BreadthFirstSearch";
+import BestFirstSearch from "../PathFindingAlgos/BestFirstSearch";
+import CreateMaze from "../MazeAlgos/RecursiveDivision";
+import { searchVars } from "../Search";
+import { gridCl } from "../Grid/Grid";
+import { mazeVars } from "../Maze";
 import "./header.css";
 
 function Header() {
