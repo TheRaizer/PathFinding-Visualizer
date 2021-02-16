@@ -23,6 +23,19 @@ class GridCl {
       }
       this.grid.push(row);
     }
+
+    let startCell = this.grid[Math.floor(this.maxY / 2)][
+      Math.floor(this.maxX / 4)
+    ];
+    let endCell = this.grid[Math.floor(this.maxY / 2)][
+      Math.floor(this.maxX - this.maxX / 4)
+    ];
+
+    startCell.cellType = CELL_TYPES.START;
+    endCell.cellType = CELL_TYPES.END;
+
+    this.startCell = startCell;
+    this.endCell = endCell;
   };
 
   getMooreNeighbours = (posX, posY) => {
