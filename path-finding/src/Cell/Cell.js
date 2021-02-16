@@ -125,9 +125,11 @@ export function CellSquareState(props) {
 
 function CellSquare({ state }) {
   const { cell } = state;
+  const [cellClass, setCellClass] = useState("load-cell");
+
   return (
     <div
-      className="cell"
+      className={cellClass}
       style={{ backgroundColor: cell.getCellColor() }}
       onMouseMove={(evt) =>
         determineCellType(evt, mouseDown, cellTypeOnMouseDown, cell)
@@ -135,6 +137,16 @@ function CellSquare({ state }) {
       onMouseDown={(evt) => {
         cellTypeOnMouseDown = cell.cellType;
         determineCellType(evt, true, cellTypeOnMouseDown, cell);
+      }}
+      onMouseOver={() => {
+        if (cellClass !== "cell-hovered") {
+          setCellClass("cell-hovered");
+        }
+      }}
+      onMouseLeave={() => {
+        if (cellClass !== "cell-unhovered") {
+          setCellClass("cell-unhovered");
+        }
       }}
       onClick={(evt) => assignFinishOrStart(evt, cell)}
     >

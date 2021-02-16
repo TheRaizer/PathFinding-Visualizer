@@ -1,6 +1,6 @@
 #grid {
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(49, 38px);
-  grid-template-rows: repeat(21, 38px);
+  grid-template-columns: repeat(63, 30.5px);
+  grid-template-rows: repeat(27, 30.5px);
 }

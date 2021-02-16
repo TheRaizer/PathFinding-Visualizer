@@ -20,15 +20,27 @@
   }
 }
 
-.cell {
+.load-cell {
   background-color: rgba(221, 221, 221, 0.603);
-  width: 40px;
-  height: 40px;
   border-width: 1px;
   border-color: rgba(102, 102, 102, 0.493);
   border-style: solid;
   font-size: x-small;
   
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+}
+
+.cell-unhovered {
+  background-color: rgba(221, 221, 221, 0.603);
+  border-width: 1px;
+  border-color: rgba(102, 102, 102, 0.493);
+  border-style: solid;
+  font-size: x-small;
+
   user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -40,7 +52,19 @@
   animation-fill-mode: forwards;
 }
 
-.cell:hover {
+.cell-hovered {
+  background-color: rgba(221, 221, 221, 0.603);
+  border-width: 1px;
+  border-color: rgba(102, 102, 102, 0.493);
+  border-style: solid;
+  font-size: x-small;
+
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  
   animation-duration: 0.5s;
   animation-name: cell-grow;
   animation-fill-mode: forwards;

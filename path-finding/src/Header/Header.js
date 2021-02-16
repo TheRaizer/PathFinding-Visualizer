@@ -16,7 +16,7 @@ function Header() {
   const [missingCell, setMissingCell] = useState(false);
 
   return (
-    <Container id="header" className="py-4" fluid>
+    <Container id="header" className="py-3" fluid>
       <Row>
         <Col xs={2}>
           <p>Ctrl Click: set start cell</p>
