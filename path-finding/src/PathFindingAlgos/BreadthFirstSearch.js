@@ -1,48 +1,10 @@
 import { searchVars, retracePath } from "../Search";
 import { timer } from "../UtilityFuncs";
-import { mazeVars } from "../Maze";
 import { gridCl } from "../Grid/Grid";
 import { CELL_TYPES } from "../Cell/CellActions";
 import Queue from "../DataStructures/Queue";
 
-export default async function BreadthFirstSearch(canCrossDiagonals) {
-  // lock the async function so it can only run one at a time
-  if (searchVars.isSearching || mazeVars.isCreatingMaze) {
-    console.log("already searching");
-    return;
-  }
-  searchVars.isSearching = true;
-  //search for the path
-  await searching(canCrossDiagonals).then(async (path) => {
-    if (path == null) {
-      console.log("no path");
-      searchVars.isSearching = false;
-      return;
-    }
-    //draw the path
-    for (let i = 0; i < path.length; i++) {
-      const cell = path[i];
-      cell.isOnPath = true;
-      cell.setCellRerender((rerender) => !rerender);
-      await timer(searchVars.pathAnimationTime);
-    }
-  });
-
-  searchVars.isSearching = false;
-}
-
-function searching(canCrossDiagonals) {
-  return new Promise((resolve, reject) => {
-    resolve(
-      search(canCrossDiagonals).catch((err) => {
-        console.log(err);
-        reject(err);
-      })
-    );
-  });
-}
-
-async function search(canCrossDiagonals) {
+export default async function breadthFirstSearch(canCrossDiagonals) {
   // reset the entire grid to prepare for the search
   await gridCl.resetForSearch();
 

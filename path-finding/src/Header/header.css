@@ -1,6 +1,10 @@
 #header {
-    background-color: rgb(159, 190, 247);
+    background-color: #a1c4fd;
     text-align: center;
     font-size:larger;
     font-weight: 500;
+}
+
+.algorithms {
+    padding-top: 20px;
 }

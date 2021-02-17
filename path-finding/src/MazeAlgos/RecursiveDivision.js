@@ -1,7 +1,5 @@
 import { rndEven, rndOdd, timer } from "../UtilityFuncs";
 import { gridCl } from "../Grid/Grid";
-import { searchVars } from "../Search";
-import { mazeVars } from "../Maze";
 import { cellIsStartOrEnd } from "../Cell/CellActions";
 import { CELL_TYPES } from "../Cell/CellActions";
 
@@ -10,19 +8,7 @@ const ORIENTATIONS = {
   VERTICAL: "VERTICAL",
 };
 
-export default async function CreateMaze() {
-  if (!mazeVars.isCreatingMaze && !searchVars.isSearching) {
-    mazeVars.isCreatingMaze = true;
-    gridCl.clearEntireGrid();
-    await gridCl.outlineGrid(1).then(() => {
-      startDivision().then(() => {
-        mazeVars.isCreatingMaze = false;
-      });
-    });
-  }
-}
-
-function startDivision() {
+export default function startRecursiveDivision() {
   return new Promise((resolve, reject) => {
     resolve(
       divide(

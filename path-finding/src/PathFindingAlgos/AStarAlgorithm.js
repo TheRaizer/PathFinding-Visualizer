@@ -2,47 +2,10 @@ import Heap from "../DataStructures/Heap";
 import { gridCl } from "../Grid/Grid";
 import { CELL_TYPES } from "../Cell/CellActions";
 import { searchVars, retracePath } from "../Search";
-import { mazeVars } from "../Maze";
 import { SEARCH_TYPES } from "../Search";
 import { timer } from "../UtilityFuncs";
 
-export default async function AStarPathFind(canCrossDiagonals) {
-  // lock the async function so it can only run one at a time
-  if (searchVars.isSearching || mazeVars.isCreatingMaze) {
-    console.log("already searching");
-    return;
-  }
-  searchVars.isSearching = true;
-  //search for the path
-  await searching(canCrossDiagonals).then(async (path) => {
-    if (path == null) {
-      console.log("no path");
-      searchVars.isSearching = false;
-      return;
-    }
-    //draw the path
-    for (let i = 0; i < path.length; i++) {
-      const cell = path[i];
-      cell.isOnPath = true;
-      cell.setCellRerender((rerender) => !rerender);
-      await timer(searchVars.pathAnimationTime);
-    }
-  });
-  searchVars.isSearching = false;
-}
-
-function searching(canCrossDiagonals) {
-  return new Promise((resolve, reject) => {
-    resolve(
-      search(canCrossDiagonals).catch((err) => {
-        console.log(err);
-        reject(err);
-      })
-    );
-  });
-}
-
-async function search(canCrossDiagonals) {
+export default async function AStarSearch(canCrossDiagonals) {
   await gridCl.resetForSearch();
   // create a heap that will contain any cells that we have opened
   const openHeap = new Heap(SEARCH_TYPES.A_STAR);
