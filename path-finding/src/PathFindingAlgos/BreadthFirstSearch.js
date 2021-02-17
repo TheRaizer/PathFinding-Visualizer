@@ -32,7 +32,6 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
   while (unvisitedQueue.size() > 0) {
     if (searchVars.stopSearch) {
       searchVars.stopSearch = false;
-      console.log("stopped search");
       return;
     }
     // dequeue to cell to get the current cell

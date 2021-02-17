@@ -90,7 +90,7 @@ function Header() {
             Best First Search
           </button>
         </Col>
-        <Col>
+        <Col className="clears">
           <button
             onClick={() => {
               if (!searchVars.isSearching && !mazeVars.isCreatingMaze) {
@@ -99,7 +99,7 @@ function Header() {
             }}
             type="button"
             className={
-              state.isCreatingMaze
+              state.isSearching || state.isCreatingMaze
                 ? "btn btn-outline-danger disabled"
                 : "btn btn-outline-danger"
             }

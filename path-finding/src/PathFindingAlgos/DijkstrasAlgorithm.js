@@ -34,7 +34,6 @@ export default async function dijkstrasSearch(canCrossDiagonals) {
   while (unvisitedHeap.lastHeapItemIndex >= 0) {
     if (searchVars.stopSearch) {
       searchVars.stopSearch = false;
-      console.log("stopped search");
       return;
     }
     // check certain neigbours depending on if it can cross diagonals or not

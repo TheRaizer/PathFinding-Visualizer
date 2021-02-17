@@ -31,7 +31,6 @@ export function retracePath(start, end) {
 export async function pathFind(canCrossDiagonals, varDispatch, search) {
   // lock the async function so it can only run one at a time
   if (searchVars.isSearching || mazeVars.isCreatingMaze) {
-    console.log("already searching");
     return;
   }
   searchVars.isSearching = true;
@@ -39,8 +38,8 @@ export async function pathFind(canCrossDiagonals, varDispatch, search) {
   //search for the path
   await searching(canCrossDiagonals, search).then(async (path) => {
     if (path == null) {
-      console.log("no path");
       searchVars.isSearching = false;
+      searchVars.stopSearch = false;
       varDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: false });
       return;
     }
@@ -53,6 +52,7 @@ export async function pathFind(canCrossDiagonals, varDispatch, search) {
     }
   });
   searchVars.isSearching = false;
+  searchVars.stopSearch = false;
   varDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: false });
 }
 

@@ -25,7 +25,6 @@ export default async function AStarSearch(canCrossDiagonals) {
   while (openHeap.lastHeapItemIndex >= 0) {
     if (searchVars.stopSearch) {
       searchVars.stopSearch = false;
-      console.log("stopped search");
       return;
     }
     const currentCell = openHeap.removeFirst();

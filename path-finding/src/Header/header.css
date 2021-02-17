@@ -8,3 +8,16 @@
 .algorithms {
     padding-top: 20px;
 }
+
+.algorithms button {
+    margin-left: 2px;
+    margin-right: 2px;
+    border-width: 2px;
+}
+
+.clears button {
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    border-width: 2px;
+}
