@@ -1,5 +1,14 @@
 import React, { useReducer, useState } from "react";
-import { Alert, Col, Container, Row } from "react-bootstrap";
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  Form,
+  FormControl,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import AStarSearch from "../PathFindingAlgos/AStarAlgorithm";
 import dijkstrasSearch from "../PathFindingAlgos/DijkstrasAlgorithm";
 import breadthFirstSearch from "../PathFindingAlgos/BreadthFirstSearch";
@@ -29,69 +38,92 @@ function Header() {
   return (
     <Container id="header" className="py-3" fluid>
       <Row className="unselectable">
-        <Col xs={2}>
-          <p>Ctrl Click: set start cell</p>
-          <p>Alt Click: set end cell</p>
+        <Col>
+          <InputGroup className="mt-4">
+            <InputGroup.Prepend>
+              <InputGroup.Text id="prepending-text">
+                Animation Interval (ms)
+              </InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              id="basic-number"
+              aria-describedby="prepending-text"
+              value={animationInterval}
+              onChange={(evt) => {
+                setAnimationInterval(evt.target.value);
+                searchVars.searchAnimationTime = evt.target.value;
+              }}
+            />
+          </InputGroup>
+        </Col>
+        <Col className="can-cross-diagonals">
+          <Form>
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label="Can Cross Diagonals"
+              checked={canCrossDiagonals}
+              onChange={() =>
+                setCanCrossDiagonals((canCrossDiagonals) => !canCrossDiagonals)
+              }
+            />
+          </Form>
         </Col>
         <Col xs={4} className="algorithms">
-          <button
+          <Button
+            variant="outline-dark"
             onClick={() => createMaze(startRecursiveDivision, dispatch)}
             type="button"
             className={
-              state.isSearching || state.isCreatingMaze
-                ? "btn btn-outline-dark disabled"
-                : "btn btn-outline-dark"
+              state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             Create Maze
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outline-dark"
             onClick={() => executePathFinding(AStarSearch)}
             type="button"
             className={
-              state.isSearching || state.isCreatingMaze
-                ? "btn btn-outline-dark disabled"
-                : "btn btn-outline-dark"
+              state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             A*
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outline-dark"
             onClick={() => executePathFinding(dijkstrasSearch)}
             type="button"
             className={
-              state.isSearching || state.isCreatingMaze
-                ? "btn btn-outline-dark disabled"
-                : "btn btn-outline-dark"
+              state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             Dijkstras
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outline-dark"
             onClick={() => executePathFinding(breadthFirstSearch)}
             type="button"
             className={
-              state.isSearching || state.isCreatingMaze
-                ? "btn btn-outline-dark disabled"
-                : "btn btn-outline-dark"
+              state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             Breadth First Search
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outline-dark"
             onClick={() => executePathFinding(bestFirstSearch)}
             type="button"
             className={
-              state.isSearching || state.isCreatingMaze
-                ? "btn btn-outline-dark disabled"
-                : "btn btn-outline-dark"
+              state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             Best First Search
-          </button>
+          </Button>
         </Col>
         <Col className="clears">
-          <button
+          <Button
+            variant="outline-danger"
             onClick={() => {
               if (!searchVars.isSearching && !mazeVars.isCreatingMaze) {
                 gridCl.clearEntireGrid();
@@ -99,64 +131,43 @@ function Header() {
             }}
             type="button"
             className={
-              state.isSearching || state.isCreatingMaze
-                ? "btn btn-outline-danger disabled"
-                : "btn btn-outline-danger"
+              state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             Clear Entire Grid
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outline-danger"
             onClick={() => {
               if (!mazeVars.isCreatingMaze) {
                 gridCl.clearWalls();
               }
             }}
             type="button"
-            className={
-              state.isCreatingMaze
-                ? "btn btn-outline-danger disabled"
-                : "btn btn-outline-danger"
-            }
+            className={state.isCreatingMaze ? "disabled" : ""}
           >
             Clear Walls
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outline-danger"
             onClick={() => {
               if (searchVars.isSearching) {
                 searchVars.stopSearch = true;
               }
             }}
             type="button"
-            className={
-              state.isSearching
-                ? "btn btn-outline-danger"
-                : "btn btn-outline-danger disabled"
-            }
+            className={state.isSearching ? "" : "disabled"}
           >
             Stop Search
-          </button>
+          </Button>
         </Col>
-        <Col>
-          <input
-            type="checkbox"
-            checked={canCrossDiagonals}
-            onChange={() =>
-              setCanCrossDiagonals((canCrossDiagonals) => !canCrossDiagonals)
-            }
-          />
-          Can Cross Diagonals
-        </Col>
-        <Col>
-          <p>Animation Interval (ms)</p>
-          <input
-            type="number"
-            value={animationInterval}
-            onChange={(evt) => {
-              setAnimationInterval(evt.target.value);
-              searchVars.searchAnimationTime = evt.target.value;
-            }}
-          />
+        <Col xs={2}>
+          <p>
+            <b>Ctrl Click:</b> set start cell
+          </p>
+          <p>
+            <b>Alt Click:</b> set end cell
+          </p>
         </Col>
       </Row>
       {missingCell ? (

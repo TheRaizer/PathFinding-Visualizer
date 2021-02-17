@@ -138,7 +138,7 @@ function CellSquare({ state }) {
         cellTypeOnMouseDown = cell.cellType;
         determineCellType(evt, true, cellTypeOnMouseDown, cell);
       }}
-      onMouseOver={() => {
+      onMouseEnter={() => {
         if (cellClass !== "cell-hovered") {
           setCellClass("cell-hovered");
         }
