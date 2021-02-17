@@ -1,5 +1,6 @@
 {
   "name": "path-finding",
+   "homepage": "https://TheRaizer.github.io/pathfinding",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

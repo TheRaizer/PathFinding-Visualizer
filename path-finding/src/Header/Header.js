@@ -18,6 +18,7 @@ import { searchVars, pathFind } from "../Search";
 import { gridCl } from "../Grid/Grid";
 import { mazeVars, createMaze } from "../Maze";
 import algoReducer, { initialState } from "../AlgorithmReducer";
+import { clamp } from "../UtilityFuncs";
 import "./header.css";
 
 function Header() {
@@ -39,7 +40,7 @@ function Header() {
     <Container id="header" className="py-3" fluid>
       <Row className="unselectable">
         <Col>
-          <InputGroup className="mt-4">
+          <InputGroup className="mt-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="prepending-text">
                 Animation Interval (ms)
@@ -50,9 +51,20 @@ function Header() {
               aria-describedby="prepending-text"
               value={animationInterval}
               onChange={(evt) => {
-                setAnimationInterval(evt.target.value);
-                searchVars.searchAnimationTime = evt.target.value;
+                if (evt.target.value !== "") {
+                  let interval = clamp(
+                    parseFloat(evt.target.value),
+                    searchVars.minSearchTime,
+                    searchVars.maxSearchTime
+                  );
+                  setAnimationInterval(interval);
+                  searchVars.searchAnimationTime = interval;
+                }
               }}
+              min={searchVars.minSearchTime}
+              max={searchVars.maxSearchTime}
+              step="50"
+              type="number"
             />
           </InputGroup>
         </Col>

@@ -11,6 +11,8 @@ export const SEARCH_TYPES = {
 export const searchVars = {
   isSearching: false,
   stopSearch: false,
+  maxSearchTime: 3000,
+  minSearchTime: 1,
   pathAnimationTime: 10,
   searchAnimationTime: 15,
 };

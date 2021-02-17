@@ -18,3 +18,5 @@ export const rndOdd = (min, max) => {
   let randomNum = Math.floor(rnd(min, max) / 2) * 2 + 1;
   return randomNum;
 };
+
+export const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
