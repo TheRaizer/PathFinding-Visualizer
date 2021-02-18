@@ -63,7 +63,6 @@ function Header() {
               }}
               min={searchVars.minSearchTime}
               max={searchVars.maxSearchTime}
-              step="50"
               type="number"
             />
           </InputGroup>
