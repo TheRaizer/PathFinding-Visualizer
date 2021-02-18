@@ -149,8 +149,6 @@ function CellSquare({ state }) {
         }
       }}
       onClick={(evt) => assignFinishOrStart(evt, cell)}
-    >
-      <p>{/* X: {cell.x} Y: {cell.y} */}</p>
-    </div>
+    />
   );
 }
