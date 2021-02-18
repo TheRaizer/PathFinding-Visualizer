@@ -37,10 +37,6 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
     }
     // dequeue to cell to get the current cell
     currentCell = unvisitedQueue.deQueue();
-    if (currentCell === undefined) {
-      // if there is nothing to dequeue then no path
-      break;
-    }
 
     // if the current cell is the end then we have the shortest path
     if (currentCell === endCell) {
@@ -80,7 +76,7 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
           );
 
         // if the newDistanceFromStartToNeighbour is smaller then the current shortest
-        if (neighbour.gCost > newDistanceFromStartToNeighbour) {
+        if (newDistanceFromStartToNeighbour < neighbour.gCost) {
           // assign the new shortest distance
           neighbour.gCost = newDistanceFromStartToNeighbour;
 
@@ -115,6 +111,7 @@ function initGCosts() {
     resolve(
       gridCl.grid.forEach((row) =>
         row.forEach((cell) => {
+          // initialize all the gCosts to be as large as possible as none have been visited yet
           cell.gCost = Number.MAX_SAFE_INTEGER;
         })
       )

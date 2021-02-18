@@ -161,6 +161,7 @@ class GridCl {
 
   calculateDistance(cellA, cellB, canCrossDiagonals) {
     if (canCrossDiagonals) {
+      // distance for diagonal algorithms is calculated using octile distance
       var dstX = Math.abs(cellA.x - cellB.x);
       var dstY = Math.abs(cellA.y - cellB.y);
 
@@ -170,6 +171,7 @@ class GridCl {
 
       return 14 * dstX + 10 * (dstY - dstX);
     } else {
+      // distance for non-diagonal algorithms is calculated using manhattan distance
       return Math.abs(cellA.x - cellB.x) + Math.abs(cellA.y - cellB.y);
     }
   }

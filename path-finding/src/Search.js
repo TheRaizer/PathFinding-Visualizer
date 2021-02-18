@@ -25,6 +25,10 @@ export function retracePath(start, end) {
 }
 
 export async function pathFind(canCrossDiagonals, varDispatch, search) {
+  // canCrossDiagonals: whether the algorithm can jump diagonally(changes the neighbours checked and the path created)
+  // varDispatch: dispatch function used to change state for the Header component
+  // search: the searching algorithm to use
+
   // lock the async function so it can only run one at a time
   if (searchVars.isSearching || mazeVars.isCreatingMaze) {
     return;
@@ -34,6 +38,7 @@ export async function pathFind(canCrossDiagonals, varDispatch, search) {
   //search for the path
   await searching(canCrossDiagonals, search).then(async (path) => {
     if (path == null) {
+      // make sure if we've found a path that the algorithm state is restored
       searchVars.isSearching = false;
       searchVars.stopSearch = false;
       varDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: false });
@@ -53,6 +58,7 @@ export async function pathFind(canCrossDiagonals, varDispatch, search) {
 }
 
 function searching(canCrossDiagonals, search) {
+  // create a promise that will execute the given search algorithm
   return new Promise((resolve, reject) => {
     resolve(
       search(canCrossDiagonals).catch((err) => {

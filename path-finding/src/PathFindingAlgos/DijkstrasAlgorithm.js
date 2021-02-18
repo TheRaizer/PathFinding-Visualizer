@@ -68,7 +68,7 @@ export default async function dijkstrasSearch(canCrossDiagonals) {
           );
 
         // if the newDistanceFromStartToNeighbour is smaller then the current shortest
-        if (neighbour.gCost > newDistanceFromStartToNeighbour) {
+        if (newDistanceFromStartToNeighbour < neighbour.gCost) {
           // assign the new shortest distance
           neighbour.gCost = newDistanceFromStartToNeighbour;
 
@@ -114,6 +114,7 @@ function initHeap(heap) {
     resolve(
       gridCl.grid.forEach((row) =>
         row.forEach((cell) => {
+          // initialize all the gCosts to be as large as possible as none have been visited yet
           cell.gCost = Number.MAX_SAFE_INTEGER;
           heap.push(cell);
         })

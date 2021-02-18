@@ -66,31 +66,40 @@ export const determineCellType = (
   cellTypeOnMouseDown,
   cell
 ) => {
+  // if the mouse button is down
   if (mouseDown) {
+    // if the mouse button has been lifted leave func
     if (cellTypeOnMouseDown === -1) return;
+    // if the cellType the mouse is down on to start is empty than we will be putting walls vice-versa
     const cellType =
       cellTypeOnMouseDown === CELL_TYPES.EMPTY
         ? CELL_TYPES.OBSTACLE
         : CELL_TYPES.EMPTY;
+
+    // if the cellType is not equal to the celltype we are drawing and the alt and ctrl key are not down
     if (cell.cellType !== cellType && !evt.altKey && !evt.ctrlKey) {
+      // if the cell is start or end then do not change cell type
       if (cellIsStartOrEnd(cell.x, cell.y)) {
         return;
       }
+      // if they are closed or opened and we are searching then do not change cell type
       if ((cell.closed || cell.opened) && searchVars.isSearching) {
         return;
       }
+      // change cell type to be the cellType we are drawing
       changeCellType(cell, cellType);
     }
   }
 };
 
 const changeCellType = (cell, cellType) => {
+  // change cell type and rerender the cell
   cell.cellType = cellType;
   cell.setCellRerender((rerender) => !rerender);
 };
 
 export function compareAStarCells(a, b) {
-  // if the fcost is smaller then the other cells fcost then it succeeds otherwise it precedes
+  // the lower the fCost the higher up in the heap the must be
   var comparison = a.fCost() < b.fCost() ? -1 : 1;
 
   // if the fCosts are equal
@@ -103,6 +112,7 @@ export function compareAStarCells(a, b) {
 }
 
 export function compareDijkstrasCells(a, b) {
+  // the lower the gCost the higher up in the heap the cell must be
   var comparison = a.gCost < b.gCost ? -1 : 1;
   if (a.gCost === b.gCost) {
     comparison = 0;
@@ -111,6 +121,7 @@ export function compareDijkstrasCells(a, b) {
 }
 
 export function compareBestFirstCells(a, b) {
+  // the lower the hCost the higher up in the heap the cell must be
   var comparison = a.hCost < b.hCost ? -1 : 1;
   if (a.hCost === b.hCost) {
     comparison = 0;

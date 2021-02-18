@@ -2,7 +2,7 @@ export const ALGO_ACTIONS = {
   IS_SEARCHING: "IS_SEARCHING",
   IS_CREATING_MAZE: "IS_CREATING_MAZE",
 };
-
+// this state represents( but does not manage) the state of the algorithms so the header can change accordingly
 export const initialState = {
   isSearching: false,
   isCreatingMaze: false,
