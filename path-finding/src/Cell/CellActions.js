@@ -9,6 +9,10 @@ export const CELL_TYPES = {
 };
 
 export const assignFinishOrStart = (evt, cell) => {
+  // you cannot reassign start and end cells when searching
+  if (searchVars.isSearching) {
+    return;
+  }
   if (evt.altKey) {
     // if the cell is the end cell
     if (cell.cellType === CELL_TYPES.END) {
