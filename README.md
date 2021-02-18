@@ -1,12 +1,15 @@
 # Pathfinding Algorithms
 The link to the website is **https://theraizer.github.io/PathFinding-Algorithms/**
 
-The pathfinding algorithms it includes are:
-- A*
-![A Star Pathfinding Gif not found](AStarVisual.gif)
-- Dijkstra's
-- Breadth-First Search
-- Best First Search
+The pathfinding algorithms included are:
+- ## A*
+![A Star GIF not found](AStarVisual.gif)
+- ## Dijkstra's
+![Dijkstra's GIF not found](DijkstrasVisual.gif)
+- ## Breadth-First Search
+![Breadth-First GIF not found](BreadthFirstVisual.gif)
+- ## Best First Search
+![Best First GIF not found](BestFirstVisual.gif)
 
 The Maze Generation Algorithm is recursive division.
 
