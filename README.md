@@ -11,7 +11,13 @@ The pathfinding algorithms included are:
 - ## Best First Search
 ![Best First GIF not found](BestFirstVisual.gif)
 
-The Maze Generation Algorithm is recursive division.
+### **The Maze Generation Algorithm is recursive division and can be seen below:**
+![Recursive Division GIF not found](RecursiveDivisionVisual.gif)
 
-Here is a look at how you can create walls for the algorithms to work around.
+### **If you like you can also manually create walls for the algorithms to work around:**
+![Wall Drawing GIF not found](WallDrawingVisual.gif)
 
+Due to the asynchronous functionality of the algorithm it is indeed possible to actively block the 
+running pathfinding algorithm (to make the output path as accurate as possible you cannot draw over 
+opened or closed cells):
+![GIF not found](FightingAgainstTheAlgorithm.gif)
