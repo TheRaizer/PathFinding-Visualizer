@@ -150,12 +150,14 @@ function Header() {
           <Button
             variant="outline-danger"
             onClick={() => {
-              if (!mazeVars.isCreatingMaze) {
+              if (!mazeVars.isCreatingMaze && !searchVars.isSearching) {
                 gridCl.clearWalls();
               }
             }}
             type="button"
-            className={state.isCreatingMaze ? "disabled" : ""}
+            className={
+              state.isCreatingMaze || searchVars.isSearching ? "disabled" : ""
+            }
           >
             Clear Walls
           </Button>
