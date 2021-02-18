@@ -10,7 +10,7 @@ class GridCl {
   endCell = null;
   // dims must be odd to work with recursive division
   maxY = 27;
-  maxX = 63;
+  maxX = 61;
 
   constructor() {
     this.initGrid();
