@@ -1,8 +1,7 @@
-import { searchVars, retracePath, SEARCH_TYPES } from "../Search";
+import { searchVars, retracePath } from "../Search";
 import { timer } from "../UtilityFuncs";
 import { gridCl } from "../Grid/Grid";
-import { CELL_TYPES } from "../Cell/CellActions";
-import Heap from "../DataStructures/Heap";
+import { CELL_TYPES, compareBestFirstCells } from "../Cell/CellActions";
 
 export default async function bestFirstSearch(canCrossDiagonals) {
   /*if a cell is closed it means it has been visited, if it is not closed but is instead open
@@ -14,9 +13,9 @@ export default async function bestFirstSearch(canCrossDiagonals) {
   // init start and end cells
   const startCell = gridCl.startCell;
   const endCell = gridCl.endCell;
-
+  var Heap = require("heap");
   //create a heap of unvisited cells
-  const unvisitedHeap = new Heap(SEARCH_TYPES.BEST_FIRST);
+  const unvisitedHeap = new Heap(compareBestFirstCells);
   // initialize the heap with all the cells as they all start unvisited
   await initHeap(unvisitedHeap);
 
@@ -25,18 +24,25 @@ export default async function bestFirstSearch(canCrossDiagonals) {
   startCell.opened = true;
 
   // the start cell has a cost of 0
-  startCell.hCost = gridCl.calculateDistance(startCell, endCell);
-  unvisitedHeap.update(startCell, true);
-
-  var currentCell = unvisitedHeap.removeFirst();
+  startCell.hCost = gridCl.calculateDistance(
+    startCell,
+    endCell,
+    canCrossDiagonals
+  );
+  unvisitedHeap.updateItem(startCell);
 
   var neighbours = [];
-
+  var foundPath = false;
   // continue looping until there is not unvisited cells
-  while (unvisitedHeap.lastHeapItemIndex >= 0) {
+  while (!unvisitedHeap.empty()) {
+    var currentCell = unvisitedHeap.pop();
     if (searchVars.stopSearch) {
       searchVars.stopSearch = false;
       return;
+    }
+    if (currentCell === endCell) {
+      foundPath = true;
+      break;
     }
     // check certain neigbours depending on if it can cross diagonals or not
     if (canCrossDiagonals) {
@@ -57,7 +63,11 @@ export default async function bestFirstSearch(canCrossDiagonals) {
       // only check if neighbour is not an obstacle
       if (neighbour.cellType !== CELL_TYPES.OBSTACLE) {
         // assign the new shortest distance
-        neighbour.hCost = gridCl.calculateDistance(neighbour, endCell);
+        neighbour.hCost = gridCl.calculateDistance(
+          neighbour,
+          endCell,
+          canCrossDiagonals
+        );
 
         // assign the parent cell of the neighbour to be the curr
         neighbour.parentCell = tempCurrentCell;
@@ -67,7 +77,7 @@ export default async function bestFirstSearch(canCrossDiagonals) {
         neighbour.setCellRerender((rerender) => !rerender);
 
         // update its position in the heap
-        unvisitedHeap.update(neighbour, true);
+        unvisitedHeap.updateItem(neighbour);
       }
     });
 
@@ -79,21 +89,19 @@ export default async function bestFirstSearch(canCrossDiagonals) {
     if (searchVars.searchAnimationTime > 0) {
       await timer(searchVars.searchAnimationTime);
     }
-
-    // pick the cell with the lowest distance from the start
-    currentCell = unvisitedHeap.removeFirst();
-
-    // if the current cell is the end then we have the shortest path
-    if (currentCell === endCell) {
-      const path = retracePath(startCell, endCell);
-      return path;
-    }
     // if after picking new distances for neighbours the lowest distance cell is still max value it means there is no path.
     if (currentCell.hCost === Number.MAX_SAFE_INTEGER) {
       break;
     }
   }
-  console.log("no path found");
+
+  // if we found a path retrace it
+  if (foundPath) {
+    const path = retracePath(startCell, endCell);
+    return path;
+  } else {
+    console.log("no path found");
+  }
 }
 
 function initHeap(heap) {
@@ -102,7 +110,7 @@ function initHeap(heap) {
       gridCl.grid.forEach((row) =>
         row.forEach((cell) => {
           cell.hCost = Number.MAX_SAFE_INTEGER;
-          heap.add(cell);
+          heap.push(cell);
         })
       )
     )

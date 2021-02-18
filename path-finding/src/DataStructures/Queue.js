@@ -8,6 +8,10 @@ export default class Queue {
     this.tail++;
   }
 
+  contains(item) {
+    return Object.values(this.items).indexOf(item) > -1 ? true : false;
+  }
+
   deQueue() {
     var size = this.tail - this.head;
     if (size <= 0) return undefined;

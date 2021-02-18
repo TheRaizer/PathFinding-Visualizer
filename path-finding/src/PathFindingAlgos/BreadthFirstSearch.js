@@ -27,6 +27,7 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
   startCell.opened = true;
   startCell.gCost = 0;
   unvisitedQueue.enQueue(startCell);
+  var foundPath = false;
 
   // continue looping until there is not unvisited cells
   while (unvisitedQueue.size() > 0) {
@@ -43,8 +44,8 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
 
     // if the current cell is the end then we have the shortest path
     if (currentCell === endCell) {
-      const path = retracePath(startCell, endCell);
-      return path;
+      foundPath = true;
+      break;
     }
 
     // check certain neigbours depending on if it can cross diagonals or not
@@ -58,8 +59,10 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
     const unVisitedNeighbours = neighbours.filter((x) => !x.closed);
 
     let tempCurrentCell = currentCell;
+
     // loop through all unvisited neighbours
-    unVisitedNeighbours.forEach((neighbour) => {
+    for (let i = 0; i < unVisitedNeighbours.length; i++) {
+      var neighbour = unVisitedNeighbours[i];
       // only check if neighbour is not an obstacle
       if (neighbour.cellType !== CELL_TYPES.OBSTACLE) {
         // if the neighbour is not closed or opened
@@ -70,7 +73,11 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
         // calculate the new distance to the neighbour using the distance from the curr to the start plus the distance from the curr to the neighbour
         const newDistanceFromStartToNeighbour =
           tempCurrentCell.gCost +
-          gridCl.calculateDistance(tempCurrentCell, neighbour);
+          gridCl.calculateDistance(
+            tempCurrentCell,
+            neighbour,
+            canCrossDiagonals
+          );
 
         // if the newDistanceFromStartToNeighbour is smaller then the current shortest
         if (neighbour.gCost > newDistanceFromStartToNeighbour) {
@@ -85,7 +92,7 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
           neighbour.setCellRerender((rerender) => !rerender);
         }
       }
-    });
+    }
     // set the current cell to be closed as its neighbours have been checked and rerender
     currentCell.closed = true;
     currentCell.setCellRerender((rerender) => !rerender);
@@ -95,7 +102,12 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
       await timer(searchVars.searchAnimationTime);
     }
   }
-  console.log("no path found");
+  if (foundPath) {
+    const path = retracePath(startCell, endCell);
+    return path;
+  } else {
+    console.log("no path found");
+  }
 }
 
 function initGCosts() {

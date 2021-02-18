@@ -1,8 +1,7 @@
-import { searchVars, retracePath, SEARCH_TYPES } from "../Search";
+import { searchVars, retracePath } from "../Search";
 import { timer } from "../UtilityFuncs";
 import { gridCl } from "../Grid/Grid";
-import { CELL_TYPES } from "../Cell/CellActions";
-import Heap from "../DataStructures/Heap";
+import { CELL_TYPES, compareDijkstrasCells } from "../Cell/CellActions";
 
 export default async function dijkstrasSearch(canCrossDiagonals) {
   /*if a cell is closed it means it has been visited, if it is not closed but is instead open
@@ -15,8 +14,10 @@ export default async function dijkstrasSearch(canCrossDiagonals) {
   const startCell = gridCl.startCell;
   const endCell = gridCl.endCell;
 
+  var Heap = require("heap");
+
   //create a heap of unvisited cells
-  const unvisitedHeap = new Heap(SEARCH_TYPES.DIJKSTRA);
+  const unvisitedHeap = new Heap(compareDijkstrasCells);
   // initialize the heap with all the cells as they all start unvisited
   await initHeap(unvisitedHeap);
 
@@ -25,16 +26,21 @@ export default async function dijkstrasSearch(canCrossDiagonals) {
   startCell.opened = true;
   // the start cell has a cost of 0
   startCell.gCost = 0;
-  unvisitedHeap.update(startCell, true);
+  unvisitedHeap.updateItem(startCell);
 
-  var currentCell = unvisitedHeap.removeFirst();
+  var currentCell = unvisitedHeap.pop();
   var neighbours = [];
+  var foundPath = false;
 
   // continue looping until there is not unvisited cells
-  while (unvisitedHeap.lastHeapItemIndex >= 0) {
+  while (!unvisitedHeap.empty()) {
     if (searchVars.stopSearch) {
       searchVars.stopSearch = false;
       return;
+    }
+    if (currentCell === endCell) {
+      foundPath = true;
+      break;
     }
     // check certain neigbours depending on if it can cross diagonals or not
     if (canCrossDiagonals) {
@@ -55,7 +61,11 @@ export default async function dijkstrasSearch(canCrossDiagonals) {
         // calculate the new distance to the neighbour using the distance from the curr to the start plus the distance from the curr to the neighbour
         const newDistanceFromStartToNeighbour =
           tempCurrentCell.gCost +
-          gridCl.calculateDistance(tempCurrentCell, neighbour);
+          gridCl.calculateDistance(
+            tempCurrentCell,
+            neighbour,
+            canCrossDiagonals
+          );
 
         // if the newDistanceFromStartToNeighbour is smaller then the current shortest
         if (neighbour.gCost > newDistanceFromStartToNeighbour) {
@@ -70,7 +80,7 @@ export default async function dijkstrasSearch(canCrossDiagonals) {
           neighbour.setCellRerender((rerender) => !rerender);
 
           // update its position in the heap
-          unvisitedHeap.update(neighbour, true);
+          unvisitedHeap.updateItem(neighbour);
         }
       }
     });
@@ -85,17 +95,16 @@ export default async function dijkstrasSearch(canCrossDiagonals) {
     }
 
     // pick the cell with the lowest distance from the start
-    currentCell = unvisitedHeap.removeFirst();
+    currentCell = unvisitedHeap.pop();
 
-    // if the current cell is the end then we have the shortest path
-    if (currentCell === endCell) {
-      const path = retracePath(startCell, endCell);
-      return path;
-    }
     // if after picking new distances for neighbours the lowest distance cell is still max value it means there is no path.
     if (currentCell.gCost === Number.MAX_SAFE_INTEGER) {
       break;
     }
+  }
+  if (foundPath) {
+    const path = retracePath(startCell, endCell);
+    return path;
   }
   console.log("no path found");
 }
@@ -106,7 +115,7 @@ function initHeap(heap) {
       gridCl.grid.forEach((row) =>
         row.forEach((cell) => {
           cell.gCost = Number.MAX_SAFE_INTEGER;
-          heap.add(cell);
+          heap.push(cell);
         })
       )
     )

@@ -9,8 +9,8 @@ class GridCl {
   startCell = null;
   endCell = null;
   // dims must be odd to work with recursive division
-  maxY = 27;
-  maxX = 61;
+  maxY = 27; // 27
+  maxX = 61; // 61
 
   constructor() {
     this.initGrid();
@@ -159,15 +159,19 @@ class GridCl {
     });
   };
 
-  calculateDistance(cellA, cellB) {
-    var dstX = Math.abs(cellA.x - cellB.x);
-    var dstY = Math.abs(cellA.y - cellB.y);
+  calculateDistance(cellA, cellB, canCrossDiagonals) {
+    if (canCrossDiagonals) {
+      var dstX = Math.abs(cellA.x - cellB.x);
+      var dstY = Math.abs(cellA.y - cellB.y);
 
-    if (dstX > dstY) {
-      return 14 * dstY + 10 * (dstX - dstY);
+      if (dstX > dstY) {
+        return 14 * dstY + 10 * (dstX - dstY);
+      }
+
+      return 14 * dstX + 10 * (dstY - dstX);
+    } else {
+      return Math.abs(cellA.x - cellB.x) + Math.abs(cellA.y - cellB.y);
     }
-
-    return 14 * dstX + 10 * (dstY - dstX);
   }
 
   outlineGrid(animTime) {

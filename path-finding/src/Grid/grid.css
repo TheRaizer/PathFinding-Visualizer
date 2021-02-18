@@ -1,6 +1,8 @@
 #grid {
   display: grid;
   justify-content: center;
+  /* 1.625vw */
   grid-template-columns: repeat(61, 1.625vw);
+  /* 3.3vh */
   grid-template-rows: repeat(27, 3.3vh);
 }

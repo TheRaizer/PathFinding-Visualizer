@@ -4,7 +4,6 @@ import {
   determineCellType,
   CELL_TYPES,
 } from "./CellActions";
-import { SEARCH_TYPES } from "../Search";
 import "./cell.css";
 
 export default class Cell {
@@ -17,7 +16,7 @@ export default class Cell {
   // #region A* path finding
 
   // the cost from this cell to the start cell
-  gCost = Number.MAX_SAFE_INTEGER;
+  gCost = 0;
   // the cost from this cell to the end cell
   hCost = 0;
 
@@ -61,43 +60,6 @@ export default class Cell {
       return "lightgreen";
     }
   };
-
-  compareTo(cellToCompare, searchType) {
-    // the cell with the lowest fCost will always be at the top of the heap(indexed at 0) therefore smaller fCosts will precede
-
-    // -1 = precedes
-    // 0 = equal
-    // 1 = succeeds
-    var comparison = 0;
-    switch (searchType) {
-      case SEARCH_TYPES.A_STAR:
-        // if the fcost is smaller then the other cells fcost then it succeeds otherwise it precedes
-        comparison = this.fCost() < cellToCompare.fCost() ? 1 : -1;
-
-        // if the fCosts are equal
-        if (this.fCost() === cellToCompare.fCost()) {
-          // if the hcost is smaller then the other cells hcost then it succeeds otherwise it is equal
-          comparison = this.hCost < cellToCompare.hCost ? 1 : 0;
-        }
-
-        //return the comparison
-        return comparison;
-      case SEARCH_TYPES.DIJKSTRA:
-        comparison = this.gCost < cellToCompare.gCost ? 1 : -1;
-        if (this.gCost === cellToCompare.gCost) {
-          comparison = 0;
-        }
-        return comparison;
-      case SEARCH_TYPES.BEST_FIRST:
-        comparison = this.hCost < cellToCompare.hCost ? 1 : -1;
-        if (this.hCost === cellToCompare.hCost) {
-          comparison = 0;
-        }
-        return comparison;
-      default:
-        throw new Error("No proper search type given");
-    }
-  }
 }
 
 var mouseDown = false;
@@ -126,7 +88,6 @@ export function CellSquareState(props) {
 function CellSquare({ state }) {
   const { cell } = state;
   const [cellClass, setCellClass] = useState("load-cell");
-
   return (
     <div
       className={cellClass}
@@ -149,6 +110,6 @@ function CellSquare({ state }) {
         }
       }}
       onClick={(evt) => assignFinishOrStart(evt, cell)}
-    />
+    ></div>
   );
 }

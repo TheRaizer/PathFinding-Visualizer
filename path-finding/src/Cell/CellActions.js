@@ -88,3 +88,32 @@ const changeCellType = (cell, cellType) => {
   cell.cellType = cellType;
   cell.setCellRerender((rerender) => !rerender);
 };
+
+export function compareAStarCells(a, b) {
+  // if the fcost is smaller then the other cells fcost then it succeeds otherwise it precedes
+  var comparison = a.fCost() < b.fCost() ? -1 : 1;
+
+  // if the fCosts are equal
+  if (a.fCost() === b.fCost()) {
+    // if the hcost is smaller then the other cells hcost then it succeeds otherwise it is equal
+    comparison = a.hCost < b.hCost ? -1 : 0;
+  }
+
+  return comparison;
+}
+
+export function compareDijkstrasCells(a, b) {
+  var comparison = a.gCost < b.gCost ? -1 : 1;
+  if (a.gCost === b.gCost) {
+    comparison = 0;
+  }
+  return comparison;
+}
+
+export function compareBestFirstCells(a, b) {
+  var comparison = a.hCost < b.hCost ? -1 : 1;
+  if (a.hCost === b.hCost) {
+    comparison = 0;
+  }
+  return comparison;
+}

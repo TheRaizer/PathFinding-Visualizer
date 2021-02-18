@@ -2,12 +2,6 @@ import { ALGO_ACTIONS } from "./AlgorithmReducer";
 import { mazeVars } from "./Maze";
 import { timer } from "./UtilityFuncs";
 
-export const SEARCH_TYPES = {
-  A_STAR: "A*",
-  DIJKSTRA: "DIJKSTRA",
-  BEST_FIRST: "BEST_FIRST",
-};
-
 export const searchVars = {
   isSearching: false,
   stopSearch: false,
