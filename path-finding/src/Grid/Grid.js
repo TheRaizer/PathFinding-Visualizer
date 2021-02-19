@@ -16,6 +16,7 @@ class GridCl {
     this.initGrid();
   }
   initGrid = () => {
+    // generate and push the rows of Cell classes into the 2d array 'grid'
     for (let y = 0; y < this.maxY; y++) {
       var row = [];
       for (let x = 0; x < this.maxX; x++) {
@@ -24,21 +25,26 @@ class GridCl {
       this.grid.push(row);
     }
 
+    // set the start cell to be in the middle y index and the x index to be a quarter from the left of the grid
     let startCell = this.grid[Math.floor(this.maxY / 2)][
       Math.floor(this.maxX / 4)
     ];
+    // set the end cell to be in the middle y index and the x index a quarter from the right of the grid
     let endCell = this.grid[Math.floor(this.maxY / 2)][
       Math.floor(this.maxX - this.maxX / 4)
     ];
 
+    // assign their cellTypes
     startCell.cellType = CELL_TYPES.START;
     endCell.cellType = CELL_TYPES.END;
 
+    // assign the cells
     this.startCell = startCell;
     this.endCell = endCell;
   };
 
   getMooreNeighbours = (posX, posY) => {
+    // get the 8 surrounding neighbours of a cell at indices posX and posY
     const neighbours = [];
     for (var y = -1; y <= 1; y++) {
       for (var x = -1; x <= 1; x++) {
@@ -57,6 +63,7 @@ class GridCl {
   };
 
   getVonNeumannNeighbours = (posX, posY) => {
+    // get top, left, right, and down neighbours of a cell at indices posX and posY
     const neighbours = [];
 
     if (this.cellIsInGrid(posX - 1, posY)) {
@@ -76,6 +83,7 @@ class GridCl {
   };
 
   cellIsInGrid = (x, y) => {
+    // returns if given cell index at x and y is contained within the 2d array
     if (x < 0 || y < 0 || x >= this.maxX || y >= this.maxY) {
       return false;
     } else {
@@ -84,6 +92,7 @@ class GridCl {
   };
 
   clearEntireGrid = () => {
+    // revert every single cell to be empty and not opened closed or on path
     this.grid.forEach((row) => {
       row.forEach((cell) => {
         var rerender = false;
@@ -189,10 +198,12 @@ class GridCl {
   async outLine(animTime) {
     for (let y = 0; y < this.maxY; y++) {
       if (!cellIsStartOrEnd(0, y)) {
+        // outlines left wall
         this.grid[y][0].cellType = CELL_TYPES.OBSTACLE;
         this.grid[y][0].setCellRerender((rerender) => !rerender);
       }
       if (!cellIsStartOrEnd(this.maxX - 1, y)) {
+        // outlines right wall
         this.grid[y][this.maxX - 1].cellType = CELL_TYPES.OBSTACLE;
         this.grid[y][this.maxX - 1].setCellRerender((rerender) => !rerender);
       }
@@ -200,10 +211,12 @@ class GridCl {
     }
     for (let x = 0; x < this.maxX; x++) {
       if (!cellIsStartOrEnd(x, 0)) {
+        // outlines top wall
         this.grid[0][x].cellType = CELL_TYPES.OBSTACLE;
         this.grid[0][x].setCellRerender((rerender) => !rerender);
       }
       if (!cellIsStartOrEnd(x, this.maxY - 1)) {
+        // outlines bottom wall
         this.grid[this.maxY - 1][x].cellType = CELL_TYPES.OBSTACLE;
         this.grid[this.maxY - 1][x].setCellRerender((rerender) => !rerender);
       }
