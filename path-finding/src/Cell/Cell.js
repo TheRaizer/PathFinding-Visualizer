@@ -13,21 +13,17 @@ export default class Cell {
   closed = false;
   cellType = CELL_TYPES.EMPTY;
 
-  // #region A* path finding
-
   // the cost from this cell to the start cell
   gCost = 0;
+
   // the cost from this cell to the end cell
   hCost = 0;
 
   // the total cost
   fCost = () => this.hCost + this.gCost;
-  // #endregion
 
-  // the index in the heap
   heapIndex = -1;
 
-  // the referenced parent cell for backtracking and finding the path
   parentCell = null;
 
   constructor(x, y) {

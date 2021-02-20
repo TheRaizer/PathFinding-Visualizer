@@ -8,9 +8,10 @@ class GridCl {
   grid = [];
   startCell = null;
   endCell = null;
+
   // dims must be odd to work with recursive division
-  maxY = 27; // 27
-  maxX = 61; // 61
+  maxY = 27;
+  maxX = 61;
 
   constructor() {
     this.initGrid();
@@ -43,8 +44,8 @@ class GridCl {
     this.endCell = endCell;
   };
 
+  // get the 8 surrounding neighbours of a cell at indices posX and posY
   getMooreNeighbours = (posX, posY) => {
-    // get the 8 surrounding neighbours of a cell at indices posX and posY
     const neighbours = [];
     for (var y = -1; y <= 1; y++) {
       for (var x = -1; x <= 1; x++) {
@@ -62,8 +63,8 @@ class GridCl {
     return neighbours;
   };
 
+  // get top, left, right, and down neighbours of a cell at indices posX and posY
   getVonNeumannNeighbours = (posX, posY) => {
-    // get top, left, right, and down neighbours of a cell at indices posX and posY
     const neighbours = [];
 
     if (this.cellIsInGrid(posX - 1, posY)) {
@@ -82,8 +83,8 @@ class GridCl {
     return neighbours;
   };
 
+  // returns if given cell index at x and y is contained within the 2d array
   cellIsInGrid = (x, y) => {
-    // returns if given cell index at x and y is contained within the 2d array
     if (x < 0 || y < 0 || x >= this.maxX || y >= this.maxY) {
       return false;
     } else {
@@ -91,8 +92,8 @@ class GridCl {
     }
   };
 
+  // revert every single cell to be empty and not opened closed or on path
   clearEntireGrid = () => {
-    // revert every single cell to be empty and not opened closed or on path
     this.grid.forEach((row) => {
       row.forEach((cell) => {
         var rerender = false;
@@ -168,9 +169,12 @@ class GridCl {
     });
   };
 
+  /*
+  distance for diagonal algorithms is calculated using octile distance.
+  distance for non-diagonal algorithms is calculated using manhattan distance.
+  */
   calculateDistance(cellA, cellB, canCrossDiagonals) {
     if (canCrossDiagonals) {
-      // distance for diagonal algorithms is calculated using octile distance
       var dstX = Math.abs(cellA.x - cellB.x);
       var dstY = Math.abs(cellA.y - cellB.y);
 
@@ -180,7 +184,6 @@ class GridCl {
 
       return 14 * dstX + 10 * (dstY - dstX);
     } else {
-      // distance for non-diagonal algorithms is calculated using manhattan distance
       return Math.abs(cellA.x - cellB.x) + Math.abs(cellA.y - cellB.y);
     }
   }

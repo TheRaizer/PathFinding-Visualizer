@@ -9,13 +9,12 @@ const ORIENTATIONS = {
 };
 
 export default function startRecursiveDivision() {
-  // begin the division
   return new Promise((resolve, reject) => {
     resolve(
       divide(
         1,
         1,
-        gridCl.maxX - 2, // -1 to make it indexed base and -1 again to add an outline of 1
+        gridCl.maxX - 2,
         gridCl.maxY - 2,
         chooseOrientation(1, 1, gridCl.maxX - 2, gridCl.maxY - 2)
       ).catch((err) => {
@@ -26,10 +25,11 @@ export default function startRecursiveDivision() {
   });
 }
 
+// if the horizontal space is greater than the vertical cut vertically vice-versa
 function chooseOrientation(leftBound, upperBound, rightBound, lowerBound) {
-  // if the horizontal space is greater than the vertical cut vertically vice-versa
   const horizSpace = rightBound - leftBound;
   const vertSpace = lowerBound - upperBound;
+
   if (horizSpace > vertSpace) {
     return ORIENTATIONS.VERTICAL;
   } else if (vertSpace > horizSpace) {
@@ -41,6 +41,12 @@ function chooseOrientation(leftBound, upperBound, rightBound, lowerBound) {
   }
 }
 
+const passageSize = 1;
+
+/*Recursively Divides the grid into sections
+
+Each section is seperated by a wall with a passage.
+*/
 async function divide(
   leftBound,
   upperBound,
@@ -48,13 +54,15 @@ async function divide(
   lowerBound,
   orientation
 ) {
-  if (rightBound - leftBound < 2 || lowerBound - upperBound < 2) {
+  if (
+    rightBound - leftBound <= passageSize ||
+    lowerBound - upperBound <= passageSize
+  ) {
     return;
   }
 
   var isHorizontalCut = orientation === ORIENTATIONS.HORIZONTAL;
 
-  // find the point to start the wall at
   const { xStartIdx, yStartIdx } = findStart(
     isHorizontalCut,
     leftBound,
@@ -63,7 +71,6 @@ async function divide(
     lowerBound
   );
 
-  // find the point to place the passage
   const { xPassageIdx, yPassageIdx } = choosePassage(
     isHorizontalCut,
     leftBound,
@@ -71,11 +78,11 @@ async function divide(
     rightBound,
     lowerBound
   );
-  // calculate the max distance the wall can span
+
   var wallDist = isHorizontalCut
     ? rightBound - leftBound
     : lowerBound - upperBound;
-  // get the direction to move in according to whether it is a horiz or vert wall
+
   var dirX = isHorizontalCut ? 1 : 0;
   var dirY = isHorizontalCut ? 0 : 1;
 
@@ -136,14 +143,10 @@ async function drawWall(
   dirX,
   dirY
 ) {
-  // set the starting point to draw the wall
   var xWallIdx = xStartIdx;
   var yWallIdx = yStartIdx;
 
-  // loop through the distance of the wall
   for (let i = 0; i <= wallDist; i++) {
-    // to make the space for the passage we just avoid putting a wall where the passage occurs
-    // we also musn't put a wall where the start or end cells are
     if (
       xWallIdx === xPassageIdx ||
       yWallIdx === yPassageIdx ||
@@ -153,19 +156,20 @@ async function drawWall(
       yWallIdx += dirY;
       continue;
     }
-    // draw the wall at the indices and rerender
     gridCl.grid[yWallIdx][xWallIdx].cellType = CELL_TYPES.OBSTACLE;
     gridCl.grid[yWallIdx][xWallIdx].setCellRerender((rerender) => !rerender);
 
-    // increment the indices according to the direction
     xWallIdx += dirX;
     yWallIdx += dirY;
 
-    // timer is used for animation
     await timer(1);
   }
 }
 
+/*Chooses the point to place a passage
+
+Only place passages on odd indices so they do not intersect with walls.
+*/
 function choosePassage(
   isHorizontalCut,
   leftBound,
@@ -173,11 +177,9 @@ function choosePassage(
   rightBound,
   lowerBound
 ) {
-  // choose a passage between the given bounds
   var xPassageIdx = 0;
   var yPassageIdx = 0;
 
-  // must be any odd number between a range because walls are created on even numbers
   if (isHorizontalCut) {
     xPassageIdx = rndOdd(leftBound, rightBound);
     yPassageIdx = upperBound;
@@ -189,6 +191,11 @@ function choosePassage(
   return { xPassageIdx, yPassageIdx };
 }
 
+/*Finds the starting point to place the wall
+
+You want walls to be on even indices so they cannot be created right beside
+the grid outline as it would leave no room for a path.
+*/
 function findStart(
   isHorizontalCut,
   leftBound,
@@ -200,14 +207,8 @@ function findStart(
   var yStartIdx = 0;
   if (isHorizontalCut) {
     xStartIdx = leftBound;
-    /* a horiz wall needs to be on any random EVEN column because the lowerBound - 1 and
-    upperBound + 1 are both EVEN inclusive ranges when it is a grid whose Y-axis length is ODD
-    and an outline of 1 is applied (you dont wanna place walls right beside a bound as there would be no room for a path)*/
     yStartIdx = rndEven(upperBound + 1, lowerBound - 1);
   } else {
-    /* a vert wall needs to be on any random EVEN row because the rightBound - 1 and
-    leftBound + 1 are both EVEN inclusive ranges when it is a grid whose X-axis length is 
-    ODD and an outline of 1 is applied (you dont wanna place walls right beside a bound as there would be no room for a path)*/
     xStartIdx = rndEven(leftBound + 1, rightBound - 1);
     yStartIdx = upperBound;
   }

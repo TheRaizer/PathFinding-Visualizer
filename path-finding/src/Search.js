@@ -24,41 +24,45 @@ export function retracePath(start, end) {
   return path;
 }
 
-export async function pathFind(canCrossDiagonals, varDispatch, search) {
-  // canCrossDiagonals: whether the algorithm can jump diagonally(changes the neighbours checked and the path created)
-  // varDispatch: dispatch function used to change state for the Header component
-  // search: the searching algorithm to use
+/*Starts a given pathfinding algorithm and draws the path if found
 
-  // lock the async function so it can only run one at a time
+  varDispatch: dispatch function used to change state for the Header component
+  search: the searching algorithm to use
+*/
+export async function pathFind(canCrossDiagonals, varDispatch, search) {
   if (searchVars.isSearching || mazeVars.isCreatingMaze) {
     return;
   }
+
   searchVars.isSearching = true;
   varDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: true });
-  //search for the path
+
   await searching(canCrossDiagonals, search).then(async (path) => {
     if (path == null) {
-      // make sure if we've found a path that the algorithm state is restored
-      searchVars.isSearching = false;
-      searchVars.stopSearch = false;
-      varDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: false });
+      endSearch(varDispatch);
       return;
     }
-    //draw the path
-    for (let i = 0; i < path.length; i++) {
-      const cell = path[i];
-      cell.isOnPath = true;
-      cell.setCellRerender((rerender) => !rerender);
-      await timer(searchVars.pathAnimationTime);
-    }
+    await drawPath(path);
   });
+  endSearch(varDispatch);
+}
+
+function endSearch(varDispatch) {
   searchVars.isSearching = false;
   searchVars.stopSearch = false;
   varDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: false });
 }
 
+async function drawPath(path) {
+  for (let i = 0; i < path.length; i++) {
+    const cell = path[i];
+    cell.isOnPath = true;
+    cell.setCellRerender((rerender) => !rerender);
+    await timer(searchVars.pathAnimationTime);
+  }
+}
+
 function searching(canCrossDiagonals, search) {
-  // create a promise that will execute the given search algorithm
   return new Promise((resolve, reject) => {
     resolve(
       search(canCrossDiagonals).catch((err) => {
