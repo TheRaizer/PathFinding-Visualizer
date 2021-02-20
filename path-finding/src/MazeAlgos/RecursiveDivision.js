@@ -3,6 +3,15 @@ import { gridCl } from "../Grid/Grid";
 import { cellIsStartOrEnd } from "../Cell/CellActions";
 import { CELL_TYPES } from "../Cell/CellActions";
 
+/*Recursive Division
+
+Maze creation algorithm that recursively seperates the grid into sections.
+Each section is seperated by a wall with a single passage.
+
+The maze chooses whether to place vertical or horizontal walls in accordance 
+to each sections dimensions.
+*/
+
 const ORIENTATIONS = {
   HORIZONTAL: "HORIZONTAL",
   VERTICAL: "VERTICAL",
@@ -25,7 +34,17 @@ export default function startRecursiveDivision() {
   });
 }
 
-// if the horizontal space is greater than the vertical cut vertically vice-versa
+/* Determines whether to do a horizontal or vertical wall
+
+horizontal space is greater than the vertical cut vertically vice-versa
+
+@param {number} leftBound - the left most bound of the current section
+@param {number} upperBound - the upper most bound of the current section
+@param {number} rightBound - the right most bound of the current section
+@param {number} lowerBound - the lower most bound of the current section
+
+@return {string} orientation - the orientation of the wall to place
+*/
 function chooseOrientation(leftBound, upperBound, rightBound, lowerBound) {
   const horizSpace = rightBound - leftBound;
   const vertSpace = lowerBound - upperBound;
@@ -43,9 +62,16 @@ function chooseOrientation(leftBound, upperBound, rightBound, lowerBound) {
 
 const passageSize = 1;
 
-/*Recursively Divides the grid into sections
+/*Recursively divides the grid into sections
 
 Each section is seperated by a wall with a passage.
+
+@param {number} leftBound - the left most bound of the current section
+@param {number} upperBound - the upper most bound of the current section
+@param {number} rightBound - the right most bound of the current section
+@param {number} lowerBound - the lower most bound of the current section
+
+@param {string} orientation - the orientation of the wall to place
 */
 async function divide(
   leftBound,
@@ -134,6 +160,18 @@ async function divide(
   }
 }
 
+/* Draws the wall at a given start point and avoids placing a wall at a given passage point 
+
+The wall also avoids placing walls where there is a start or end cell
+
+@param {number} xStartIdx - the x-index in the grid to start drawing the wall
+@param {number} yStartIdx - the y-index in the grid to start drawing the wall
+@param {number} xPassageIdx - the x-index in the grid to avoid placing a wall
+@param {number} yPassageIdx - the y-index in the grid to avoid placing a wall
+@param {number} wallDist - the number of cells to draw on
+@param {number} dirX - the direction to draw cells on the x-axis
+@param {number} dirY - the direction to draw cells on the y-axis
+*/
 async function drawWall(
   xStartIdx,
   yStartIdx,
@@ -169,6 +207,14 @@ async function drawWall(
 /*Chooses the point to place a passage
 
 Only place passages on odd indices so they do not intersect with walls.
+
+@param {boolean} isHorizontalCut - whether the wall that is being placed is horizontal or not
+@param {number} leftBound - the left most bound of the current section
+@param {number} upperBound - the upper most bound of the current section
+@param {number} rightBound - the right most bound of the current section
+@param {number} lowerBound - the lower most bound of the current section
+
+@return {Object} object containing the x and y indices of the passage
 */
 function choosePassage(
   isHorizontalCut,
@@ -195,6 +241,14 @@ function choosePassage(
 
 You want walls to be on even indices so they cannot be created right beside
 the grid outline as it would leave no room for a path.
+
+@param {boolean} isHorizontalCut - whether the wall that is being placed is horizontal or not
+@param {number} leftBound - the left most bound of the current section
+@param {number} upperBound - the upper most bound of the current section
+@param {number} rightBound - the right most bound of the current section
+@param {number} lowerBound - the lower most bound of the current section
+
+@return {Object} object containing the x and y indices of the wall start
 */
 function findStart(
   isHorizontalCut,

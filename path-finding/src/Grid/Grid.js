@@ -3,13 +3,18 @@ import Cell, { CellSquareState } from "../Cell/Cell";
 import { CELL_TYPES, cellIsStartOrEnd } from "../Cell/CellActions";
 import { timer } from "../UtilityFuncs";
 import "./grid.css";
+/*The Grid
+The GridCl class contains all the cells that will be used to path find as well as the start and end cell.
+The dimensions should be odd to work with recursive division.
+
+It contains functions that manage the state of the grid.
+ */
 
 class GridCl {
   grid = [];
   startCell = null;
   endCell = null;
 
-  // dims must be odd to work with recursive division
   maxY = 27;
   maxX = 61;
 
@@ -17,7 +22,6 @@ class GridCl {
     this.initGrid();
   }
   initGrid = () => {
-    // generate and push the rows of Cell classes into the 2d array 'grid'
     for (let y = 0; y < this.maxY; y++) {
       var row = [];
       for (let x = 0; x < this.maxX; x++) {
@@ -26,25 +30,32 @@ class GridCl {
       this.grid.push(row);
     }
 
-    // set the start cell to be in the middle y index and the x index to be a quarter from the left of the grid
+    // place the start node a quarter away from the left bound
     let startCell = this.grid[Math.floor(this.maxY / 2)][
       Math.floor(this.maxX / 4)
     ];
-    // set the end cell to be in the middle y index and the x index a quarter from the right of the grid
+
+    // place the end node a quarter away from the right bound
     let endCell = this.grid[Math.floor(this.maxY / 2)][
       Math.floor(this.maxX - this.maxX / 4)
     ];
 
-    // assign their cellTypes
     startCell.cellType = CELL_TYPES.START;
     endCell.cellType = CELL_TYPES.END;
 
-    // assign the cells
     this.startCell = startCell;
     this.endCell = endCell;
   };
 
-  // get the 8 surrounding neighbours of a cell at indices posX and posY
+  /* get the 8 or less surrounding neighbours of a cell at indices posX and posY
+
+    does not retrieve the neighbour if it is not in the grid
+
+    @param {number} posX - the x-index of a given cell whose neighbours we are checking
+    @param {number} posY - the y-index of a given cell whose neighbours we are checking
+
+    @return {Array} neighbours - contains up to 8 surrounding neighbours
+   */
   getMooreNeighbours = (posX, posY) => {
     const neighbours = [];
     for (var y = -1; y <= 1; y++) {
@@ -63,7 +74,15 @@ class GridCl {
     return neighbours;
   };
 
-  // get top, left, right, and down neighbours of a cell at indices posX and posY
+  /* get top, left, right, and down neighbours of a cell at indices posX and posY
+
+    Does not retrieve the neighbour if it is not in the grid
+
+    @param {number} posX - the x-index of a given cell whose neighbours we are checking
+    @param {number} posY - the y-index of a given cell whose neighbours we are checking
+
+    @return {Array} neighbours - contains up to 4 surrounding neighbours
+   */
   getVonNeumannNeighbours = (posX, posY) => {
     const neighbours = [];
 
@@ -83,7 +102,12 @@ class GridCl {
     return neighbours;
   };
 
-  // returns if given cell index at x and y is contained within the 2d array
+  /* Checks if a cell is in the grid
+
+  @param {number} x - the x-index of a cell
+  @param {number} y - the y-index of a cell
+
+  @returns {boolean} if given cell index at x and y is contained within the 2d array */
   cellIsInGrid = (x, y) => {
     if (x < 0 || y < 0 || x >= this.maxX || y >= this.maxY) {
       return false;
@@ -92,7 +116,7 @@ class GridCl {
     }
   };
 
-  // revert every single cell to be empty and not opened closed or on path
+  // revert every single cell back to empty other then the start and end cells
   clearEntireGrid = () => {
     this.grid.forEach((row) => {
       row.forEach((cell) => {
@@ -135,6 +159,7 @@ class GridCl {
     });
   }
 
+  // reset any opened, closed, or onPath cells
   async resetCellsForSearch() {
     gridCl.grid.forEach((row) => {
       row.forEach((cell) => {
@@ -169,9 +194,16 @@ class GridCl {
     });
   };
 
-  /*
+  /* Calculates the distance between to cells
+
   distance for diagonal algorithms is calculated using octile distance.
   distance for non-diagonal algorithms is calculated using manhattan distance.
+
+  @param {Object} cellA - the first cell
+  @param {Object} cellB - the second cell
+  @param {boolean} canCrossDiagonals - whether the cellA can cross diagonals to get to cellB vice-versa
+
+  @return {float} the distance between cellA and cellB
   */
   calculateDistance(cellA, cellB, canCrossDiagonals) {
     if (canCrossDiagonals) {
@@ -198,6 +230,11 @@ class GridCl {
       )
     );
   }
+
+  /*Outlines the grid with a cell of type Obstacle
+
+  @param {float} animTime - the animation time to wait before drawing the next cell
+  */
   async outLine(animTime) {
     for (let y = 0; y < this.maxY; y++) {
       if (!cellIsStartOrEnd(0, y)) {

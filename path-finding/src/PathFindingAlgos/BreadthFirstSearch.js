@@ -11,8 +11,8 @@ Uses the boolean var opened instead of an openedSet.
 
 Always finds a shortest path.
 
-returns:
-path: list of cells representing the path or null if no path is found
+@param {boolean} canCrossDiagonals - whether the path should be able to cross diagonals
+@returns {Array} path - The path or null if no path is found
 
 */
 
@@ -70,6 +70,8 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
           neighbour,
           canCrossDiagonals
         );
+
+        // calculate the new distance from start to neighbour through the current cell
         const newDistStartToNeighbour =
           tempCurrentCell.gCost + distCurrentToNeighbour;
 

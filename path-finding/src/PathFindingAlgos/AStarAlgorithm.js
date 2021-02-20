@@ -10,8 +10,8 @@ to check.
 
 Always finds a shortest path.
 
-returns:
-path: list of cells representing the path or null if no path is found
+@param {boolean} canCrossDiagonals - whether the path should be able to cross diagonals
+@returns {Array} path - The path or null if no path is found
 
 */
 export default async function AStarSearch(canCrossDiagonals) {
@@ -63,6 +63,8 @@ export default async function AStarSearch(canCrossDiagonals) {
         neighbour,
         canCrossDiagonals
       );
+
+      // calculate the distance from the start to the neighbour through the current cell
       const newDistStartToNeighbour =
         currentCell.gCost + distCurrentToNeighbour;
 

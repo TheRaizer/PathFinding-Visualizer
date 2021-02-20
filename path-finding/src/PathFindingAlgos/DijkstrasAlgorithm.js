@@ -10,8 +10,8 @@ check too.
 
 Always finds a shortest path.
 
-returns:
-path: list of cells representing the path or null if no path is found
+@param {boolean} canCrossDiagonals - whether the path should be able to cross diagonals
+@returns {Array} path - The path or null if no path is found
 
 */
 export default async function dijkstrasSearch(canCrossDiagonals) {

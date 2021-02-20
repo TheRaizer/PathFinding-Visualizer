@@ -24,10 +24,10 @@ export function retracePath(start, end) {
   return path;
 }
 
-/*Starts a given pathfinding algorithm and draws the path if found
+/*Starts a given pathfinding algorithm and draws the path if found.
 
-  varDispatch: dispatch function used to change state for the Header component
-  search: the searching algorithm to use
+  @param {Function} varDispatch - dispatch function used to change state for the Header component
+  @param {Function} searching - the searching algorithm to run
 */
 export async function pathFind(canCrossDiagonals, varDispatch, search) {
   if (searchVars.isSearching || mazeVars.isCreatingMaze) {
@@ -47,6 +47,10 @@ export async function pathFind(canCrossDiagonals, varDispatch, search) {
   endSearch(varDispatch);
 }
 
+/*Ends the searching algorithm and resets state.
+
+@param {Function} varDispatch - dispatch function used to change state for the Header component
+*/
 function endSearch(varDispatch) {
   searchVars.isSearching = false;
   searchVars.stopSearch = false;
