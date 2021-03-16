@@ -70,14 +70,14 @@ export default async function AStarSearch(canCrossDiagonals) {
 
       if (newDistStartToNeighbour < neighbour.gCost || !neighbour.opened) {
         neighbour.gCost = newDistStartToNeighbour;
-        neighbour.hCost = gridCl.calculateDistance(
-          neighbour,
-          endCell,
-          canCrossDiagonals
-        );
         neighbour.parentCell = currentCell;
 
         if (!neighbour.opened) {
+          neighbour.hCost = gridCl.calculateDistance(
+            neighbour,
+            endCell,
+            canCrossDiagonals
+          );
           openHeap.push(neighbour);
           neighbour.opened = true;
 
