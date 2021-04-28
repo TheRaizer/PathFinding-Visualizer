@@ -259,6 +259,10 @@ function findStart(
 ) {
   var xStartIdx = 0;
   var yStartIdx = 0;
+
+  // +1 or -1 so that the start indices leave room for a path between the bound and this current wall.
+  // As long as the grid dimensions are odd, using +1 and -1 gives us even numbers which is needed for rndEven()
+
   if (isHorizontalCut) {
     xStartIdx = leftBound;
     yStartIdx = rndEven(upperBound + 1, lowerBound - 1);

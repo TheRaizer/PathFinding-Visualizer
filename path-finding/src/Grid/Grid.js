@@ -15,6 +15,7 @@ class GridCl {
   startCell = null;
   endCell = null;
 
+  // dimensions must be odd to work with recursive division
   maxY = 27;
   maxX = 61;
 
