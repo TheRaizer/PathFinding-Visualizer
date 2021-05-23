@@ -6,6 +6,9 @@ import {
 } from "./CellActions";
 import "./cell.css";
 
+/*The Grid
+The class that handles the color, costs, and states of a cell.
+ */
 export default class Cell {
   setCellRerender = null;
   isOnPath = false;
@@ -24,6 +27,7 @@ export default class Cell {
 
   heapIndex = -1;
 
+  // contains another Cell instance used for retracing a path
   parentCell = null;
 
   constructor(x, y) {

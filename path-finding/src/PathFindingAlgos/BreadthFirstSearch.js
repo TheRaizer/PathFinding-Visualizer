@@ -6,8 +6,14 @@ import Queue from "../DataStructures/Queue";
 
 /* Breadth First Search Algorithm
 
+Starts at the root of a tree and searches from each neighbouring 
+node at present depth before moving into the next level of depth.
+
 Uses a Queue to choose the next cell to check.
-Uses the boolean var opened instead of an openedSet.
+Uses gCost to assign parent cells for retracing path.
+Uses the boolean var 'opened' to determine whether a cell is in the queue.
+
+A cell is considered closed/visited once its neighbours have been checked.
 
 Always finds a shortest path.
 
@@ -63,6 +69,7 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
       var neighbour = unVisitedNeighbours[i];
       if (neighbour.cellType !== CELL_TYPES.OBSTACLE) {
         if (!neighbour.closed && !neighbour.opened) {
+          // add to the unvisited Queue if its not already been in the queue
           unvisitedQueue.enQueue(neighbour);
         }
         const distCurrentToNeighbour = gridCl.calculateDistance(
@@ -75,9 +82,11 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
         const newDistStartToNeighbour =
           tempCurrentCell.gCost + distCurrentToNeighbour;
 
+        // if the gCost is better through the current cell then it was for a previous cell
         if (newDistStartToNeighbour < neighbour.gCost) {
           neighbour.gCost = newDistStartToNeighbour;
 
+          // assign parent cell to current cell for path retracing
           neighbour.parentCell = tempCurrentCell;
 
           neighbour.opened = true;
@@ -85,6 +94,8 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
         }
       }
     }
+
+    // current cell has been visited
     currentCell.closed = true;
     currentCell.setCellRerender((rerender) => !rerender);
 
