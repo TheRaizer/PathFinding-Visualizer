@@ -37,13 +37,20 @@ export async function pathFind(canCrossDiagonals, varDispatch, search) {
   searchVars.isSearching = true;
   varDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: true });
 
-  await searching(canCrossDiagonals, search).then(async (path) => {
-    if (path == null) {
-      endSearch(varDispatch);
-      return;
-    }
-    await drawPath(path);
+  // execute promise to search that should resolve a path
+  var path = await searching(canCrossDiagonals, search).catch((err) => {
+    // if the promise was rejected the log the error
+    console.log("error in search");
+    console.error(err);
   });
+  if (path == null) {
+    endSearch(varDispatch);
+    return;
+  }
+  await drawPath(path).catch((err) => {
+    console.error(err);
+  });
+
   endSearch(varDispatch);
 }
 
@@ -68,11 +75,14 @@ async function drawPath(path) {
 
 function searching(canCrossDiagonals, search) {
   return new Promise((resolve, reject) => {
-    resolve(
-      search(canCrossDiagonals).catch((err) => {
-        console.log(err);
-        reject(err);
+    search(canCrossDiagonals)
+      .then((res) => {
+        // get the path as 'res'
+        resolve(res);
       })
-    );
+      .catch((err) => {
+        console.log("Woops");
+        reject(err);
+      });
   });
 }

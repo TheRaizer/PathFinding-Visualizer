@@ -17,7 +17,15 @@ Always finds a shortest path.
 
 */
 export default async function dijkstrasSearch(canCrossDiagonals) {
-  await gridCl.resetForSearch();
+  let success = await gridCl.resetForSearch().catch((err) => {
+    // if the promise was rejected log the error
+    console.error(err);
+  });
+
+  // if the reset for search promise did not resolve true leave
+  if (!success) {
+    return;
+  }
 
   const startCell = gridCl.startCell;
   const endCell = gridCl.endCell;

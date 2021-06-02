@@ -16,11 +16,29 @@ export async function createMaze(mazeAlgo, varDispatch) {
 
     gridCl.clearEntireGrid();
 
-    await gridCl.outlineGrid(1).then(() => {
-      mazeAlgo().then(() => {
-        mazeVars.isCreatingMaze = false;
-        varDispatch({ type: ALGO_ACTIONS.IS_CREATING_MAZE, payload: false });
+    await gridCl
+      // run outline grid promise
+      .outlineGrid(1)
+      .then(() => {
+        // if outline grid had no error run maze algorithm promise
+        mazeAlgo()
+          .catch((err) => {
+            // run if the promise was rejected
+            console.log("Error running maze algorithm");
+            console.error(err);
+          })
+          .finally(() => {
+            // no matter the outcome run this
+            mazeVars.isCreatingMaze = false;
+            varDispatch({
+              type: ALGO_ACTIONS.IS_CREATING_MAZE,
+              payload: false,
+            });
+          });
+      })
+      .catch((err) => {
+        // if the outline grid promise was rejected log the error
+        console.error(err);
       });
-    });
   }
 }

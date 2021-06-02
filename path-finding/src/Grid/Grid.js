@@ -32,14 +32,14 @@ class GridCl {
     }
 
     // place the start node a quarter away from the left bound
-    let startCell = this.grid[Math.floor(this.maxY / 2)][
-      Math.floor(this.maxX / 4)
-    ];
+    let startCell =
+      this.grid[Math.floor(this.maxY / 2)][Math.floor(this.maxX / 4)];
 
     // place the end node a quarter away from the right bound
-    let endCell = this.grid[Math.floor(this.maxY / 2)][
-      Math.floor(this.maxX - this.maxX / 4)
-    ];
+    let endCell =
+      this.grid[Math.floor(this.maxY / 2)][
+        Math.floor(this.maxX - this.maxX / 4)
+      ];
 
     startCell.cellType = CELL_TYPES.START;
     endCell.cellType = CELL_TYPES.END;
@@ -151,12 +151,16 @@ class GridCl {
 
   resetForSearch() {
     return new Promise((resolve, reject) => {
-      resolve(
-        this.resetCellsForSearch().catch((err) => {
-          console.log(err);
-          reject(err);
+      // reset cells
+      this.resetCellsForSearch()
+        .then(() => {
+          // if there were no errors resolve the promise as true
+          resolve(true);
         })
-      );
+        .catch((err) => {
+          // if there was an error reject the promise
+          reject(err);
+        });
     });
   }
 
@@ -223,12 +227,13 @@ class GridCl {
 
   outlineGrid(animTime) {
     return new Promise((resolve, reject) =>
-      resolve(
-        this.outLine(animTime).catch((err) => {
-          console.log(err);
+      this.outLine(animTime)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
           reject(err);
         })
-      )
     );
   }
 

@@ -19,18 +19,19 @@ const ORIENTATIONS = {
 
 export default function startRecursiveDivision() {
   return new Promise((resolve, reject) => {
-    resolve(
-      divide(
-        1,
-        1,
-        gridCl.maxX - 2,
-        gridCl.maxY - 2,
-        chooseOrientation(1, 1, gridCl.maxX - 2, gridCl.maxY - 2)
-      ).catch((err) => {
-        console.log(err);
-        reject(err);
+    divide(
+      1,
+      1,
+      gridCl.maxX - 2,
+      gridCl.maxY - 2,
+      chooseOrientation(1, 1, gridCl.maxX - 2, gridCl.maxY - 2)
+    )
+      .then(() => {
+        resolve("success");
       })
-    );
+      .catch((err) => {
+        reject(err);
+      });
   });
 }
 
