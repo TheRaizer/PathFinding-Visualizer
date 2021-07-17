@@ -1,6 +1,6 @@
 {
   "name": "path-finding",
-  "homepage": "https://theraizer.github.io/PathFinding-Algorithms/",
+  "homepage": "https://theraizer.github.io/PathFinding-Visualizer/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
