@@ -1,0 +1,112 @@
+.tutorial {
+  position: relative;
+}
+
+.slides {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: rgb(236, 236, 236);
+  border-radius: 10px;
+  padding: 1% 2%;
+}
+
+.slides > .lower {
+  display: flex;
+  justify-content: space-between;
+}
+
+.lower > p {
+  margin-top: 4%;
+}
+
+.tutorial button {
+  margin-top: 3%;
+  height: fit-content;
+  min-width: 80px;
+  max-width: 100px;
+
+  font-weight: 400;
+  font-size: 1.2em;
+
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  border-color: rgb(109, 109, 109);
+  padding: 5px 5px 5px 5px;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.tutorial button:hover {
+  background-color: #363636;
+  color: rgb(228, 228, 228);
+}
+
+.tutorial button.disabled {
+  color: rgb(109, 109, 109);
+}
+.tutorial button.disabled:hover {
+  color: rgb(109, 109, 109);
+  background-color: transparent;
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min-content;
+}
+
+.slide img {
+  width: 782px;
+  height: 423px;
+}
+
+.slide > h4 {
+  margin-top: 3%;
+  font-weight: bold;
+  height: 3em;
+}
+
+#skip {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2%;
+}
+
+#rewatch-tutorial {
+  background-color: rgb(109, 109, 109);
+  color: rgb(230, 230, 230);
+  font-size: 1em;
+  z-index: 100;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
+#rewatch-tutorial:hover {
+  background-color: rgb(80, 80, 80);
+}
+
+@media only screen and (max-width: 830px) {
+  .slide img {
+    width: 65vw;
+  }
+
+  .slide {
+    height: 80vh;
+  }
+
+  .slides {
+    width: 70vw;
+    height: 90vh;
+  }
+}

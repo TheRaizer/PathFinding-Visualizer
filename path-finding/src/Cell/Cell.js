@@ -80,7 +80,7 @@ export function CellSquareState(props) {
 function CellSquare({ state }) {
   const { cell } = state;
   return (
-    <div
+    <button
       className={`cell ${
         cell.cellType === CELL_TYPES.START || cell.cellType === CELL_TYPES.END
           ? "main"
@@ -92,6 +92,6 @@ function CellSquare({ state }) {
         cellTypeOnMouseDown = cell.cellType;
         determineCellType(cellTypeOnMouseDown, cell);
       }}
-    ></div>
+    ></button>
   );
 }

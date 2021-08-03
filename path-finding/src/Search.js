@@ -5,7 +5,6 @@ import { timer } from "./UtilityFuncs";
 export const searchVars = {
   isSearching: false,
   stopSearch: false,
-  maxSearchTime: 3000,
   minSearchTime: 1,
   pathAnimationTime: 10,
   searchAnimationTime: 15,
@@ -24,18 +23,26 @@ export function retracePath(start, end) {
   return path;
 }
 
-/*Starts a given pathfinding algorithm and draws the path if found.
+/*
 
   @param {Function} varDispatch - dispatch function used to change state for the Header component
   @param {Function} searching - the searching algorithm to run
 */
-export async function pathFind(canCrossDiagonals, varDispatch, search) {
+
+/** Starts a given pathfinding algorithm and draws the path if found.
+ *
+ * @param {Boolean} canCrossDiagonals - whether the searching algorithm can cross diagonals.
+ * @param {Function} headerDispatch - dispatch function used to change state for the Header component
+ * @param {Function} search - the searching algorithm to run.
+ * @returns
+ */
+export async function pathFind(canCrossDiagonals, headerDispatch, search) {
   if (searchVars.isSearching || mazeVars.isCreatingMaze) {
     return;
   }
 
   searchVars.isSearching = true;
-  varDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: true });
+  headerDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: true });
 
   // execute promise to search that should resolve a path
   var path = await searching(canCrossDiagonals, search).catch((err) => {
@@ -43,25 +50,29 @@ export async function pathFind(canCrossDiagonals, varDispatch, search) {
     console.log("error in search");
     console.error(err);
   });
+
+  // no path was found
   if (path == null) {
-    endSearch(varDispatch);
+    endSearch(headerDispatch, false);
     return;
   }
   await drawPath(path).catch((err) => {
     console.error(err);
   });
 
-  endSearch(varDispatch);
+  endSearch(headerDispatch, true);
 }
 
-/*Ends the searching algorithm and resets state.
-
-@param {Function} varDispatch - dispatch function used to change state for the Header component
-*/
-function endSearch(varDispatch) {
+/** Ends the searching algorithm and resets state.
+ *
+ * @param {Function} headerDispatch - dispatch function used to change state for the Header component
+ * @param {Boolean} foundPath - whether a path was found or not
+ */
+function endSearch(headerDispatch, foundPath) {
   searchVars.isSearching = false;
   searchVars.stopSearch = false;
-  varDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: false });
+  headerDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: false });
+  headerDispatch({ type: ALGO_ACTIONS.FOUND_PATH, payload: foundPath });
 }
 
 async function drawPath(path) {
@@ -81,7 +92,6 @@ function searching(canCrossDiagonals, search) {
         resolve(res);
       })
       .catch((err) => {
-        console.log("Woops");
         reject(err);
       });
   });

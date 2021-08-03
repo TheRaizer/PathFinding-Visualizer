@@ -4,34 +4,29 @@ import dijkstrasSearch from "../PathFindingAlgos/DijkstrasAlgorithm";
 import breadthFirstSearch from "../PathFindingAlgos/BreadthFirstSearch";
 import bestFirstSearch from "../PathFindingAlgos/BestFirstSearch";
 import startRecursiveDivision from "../MazeAlgos/RecursiveDivision";
+import closeIcon from "./Icons/close-icon.png";
 import { searchVars, pathFind } from "../Search";
 import { gridCl } from "../Grid/Grid";
-import { mazeVars, createMaze } from "../Maze";
-import algoReducer, { initialState } from "../AlgorithmReducer";
+import { createMaze } from "../Maze";
+import algoReducer, { ALGO_ACTIONS, initialState } from "../AlgorithmReducer";
 import { clamp } from "../UtilityFuncs";
 import "./header.css";
 
 function Header() {
+  // this reducer changes state during pathfinding and allows this header to rerender.
   const [state, dispatch] = useReducer(algoReducer, initialState);
 
   const [canCrossDiagonals, setCanCrossDiagonals] = useState(true);
   const [animationInterval, setAnimationInterval] = useState(15);
-  const [missingCell, setMissingCell] = useState(false);
 
   const executePathFinding = (algorithm) => {
     if (gridCl.startCell != null && gridCl.endCell != null) {
       pathFind(canCrossDiagonals, dispatch, algorithm);
-    } else {
-      setMissingCell(true);
     }
   };
-
   return (
     <section className="header">
       <div className="main">
-        <section id="instructions">
-          <button>Tutorial</button>
-        </section>
         <div>
           <div className="input-with-prepending">
             <h5>Animation Interval (ms)</h5>
@@ -42,14 +37,12 @@ function Header() {
                   let interval = clamp(
                     parseFloat(evt.target.value),
                     searchVars.minSearchTime,
-                    searchVars.maxSearchTime
+                    Number.MAX_VALUE
                   );
-                  setAnimationInterval(interval);
                   searchVars.searchAnimationTime = interval;
                 }
+                setAnimationInterval(evt.target.value);
               }}
-              min={searchVars.minSearchTime}
-              max={searchVars.maxSearchTime}
               type="number"
             />
           </div>
@@ -66,14 +59,17 @@ function Header() {
             <span className="slider round"></span>
           </div>
         </div>
-        <button
-          onClick={() => createMaze(startRecursiveDivision, dispatch)}
-          className={
-            state.isSearching || state.isCreatingMaze ? "disabled" : ""
-          }
-        >
-          Create Maze
-        </button>
+        <section>
+          <h4>Create Obstacles</h4>
+          <button
+            onClick={() => createMaze(startRecursiveDivision, dispatch)}
+            className={
+              state.isSearching || state.isCreatingMaze ? "disabled" : ""
+            }
+          >
+            Create Maze
+          </button>
+        </section>
         <section className="algorithms">
           <h4>Pathfinding Algorithms</h4>
           <button
@@ -113,9 +109,7 @@ function Header() {
           <h4>Clearing Options</h4>
           <button
             onClick={() => {
-              if (!searchVars.isSearching && !mazeVars.isCreatingMaze) {
-                gridCl.clearEntireGrid();
-              }
+              gridCl.clearEntireGrid();
             }}
             className={
               state.isSearching || state.isCreatingMaze ? "disabled" : ""
@@ -125,9 +119,7 @@ function Header() {
           </button>
           <button
             onClick={() => {
-              if (!mazeVars.isCreatingMaze && !searchVars.isSearching) {
-                gridCl.clearWalls();
-              }
+              gridCl.clearWalls();
             }}
             className={
               state.isCreatingMaze || searchVars.isSearching ? "disabled" : ""
@@ -137,9 +129,7 @@ function Header() {
           </button>
           <button
             onClick={() => {
-              if (searchVars.isSearching) {
-                searchVars.stopSearch = true;
-              }
+              searchVars.stopSearch = true;
             }}
             type="button"
             className={state.isSearching ? "" : "disabled"}
@@ -148,12 +138,16 @@ function Header() {
           </button>
         </section>
       </div>
-      <div
-        className={`notif ${missingCell ? "appear" : ""}`}
-        onClose={() => setMissingCell(false)}
-      >
+      <div className={`notif ${state.foundPath === true ? "" : "appear"}`}>
         <div>
-          <h4>You are missing a start or end cell</h4>
+          <h4>No path was found!</h4>
+          <button
+            onClick={() => {
+              dispatch({ type: ALGO_ACTIONS.FOUND_PATH, payload: true });
+            }}
+          >
+            <img src={closeIcon} alt="Close" />
+          </button>
         </div>
       </div>
     </section>

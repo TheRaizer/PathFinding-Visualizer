@@ -1,3 +1,7 @@
+.disabled {
+  pointer-events: none;
+}
+
 .header {
   padding-top: 2vh;
   background-color: #a1c4fd;
@@ -14,7 +18,7 @@
 .header > .main {
   display: flex;
   padding-bottom: 2vh;
-
+  align-items: center;
   justify-content: space-around;
 }
 
@@ -25,7 +29,7 @@
 
 .notif {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .notif > div {
@@ -33,21 +37,38 @@
   justify-content: center;
   align-items: center;
 
+  padding: 10px 30px;
   border-radius: 10px;
+
   background-color: rgb(240, 105, 105);
-  width: 30vw;
-  height: 10%;
+  width: 20vw;
+  min-width: fit-content;
+  height: 5vh;
 }
 
-.notif.appear {
+.notif.appear > div {
   display: flex;
+  position: relative;
+  margin-bottom: 1vh;
 }
 
-#click-instructions > h4 {
-  line-height: 1.6em;
+.notif.appear > div > button {
+  position: absolute;
+  border: none;
+  background: transparent;
+  color: white;
+  top: -5px;
+  right: -30px;
+}
+
+.notif.appear > div > button > img {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
 }
 
 .header button {
+  height: fit-content;
   min-width: 80px;
 
   font-weight: 400;
@@ -114,4 +135,12 @@
 #diagonals-checkbox {
   height: 20px;
   width: 20px;
+}
+
+@media only screen and (max-width: 775px) {
+  .header > .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
