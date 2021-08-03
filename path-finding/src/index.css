@@ -6,7 +6,7 @@ body {
   background-color: cornflowerblue;
 }
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -16,4 +16,12 @@ code {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.fade-in {
+  transition: opacity 200ms ease-in;
+}
+
+.fade-in.appear {
+  opacity: 1;
 }

@@ -1,33 +1,117 @@
-#header {
-    background-color: #a1c4fd;
-    text-align: center;
-    font-size:larger;
-    font-weight: 500;
+.header {
+  padding-top: 2vh;
+  background-color: #a1c4fd;
 }
 
-.algorithms {
-    padding-top: 20px;
+.header > div {
+  text-align: center;
 }
 
-.algorithms button {
-    margin-left: 2px;
-    margin-right: 2px;
-    border-width: 2px;
+.header > div > section > h4 {
+  margin-bottom: 5px;
+}
+
+.header > .main {
+  display: flex;
+  padding-bottom: 2vh;
+
+  justify-content: space-around;
+}
+
+.header h4 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.notif {
+  display: flex;
+  justify-content: center;
+}
+
+.notif > div {
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 10px;
+  background-color: rgb(240, 105, 105);
+  width: 30vw;
+  height: 10%;
+}
+
+.notif.appear {
+  display: flex;
+}
+
+#click-instructions > h4 {
+  line-height: 1.6em;
+}
+
+.header button {
+  min-width: 80px;
+
+  font-weight: 400;
+  font-size: 1.2em;
+
+  margin-left: 2px;
+  margin-right: 2px;
+
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  border-color: rgb(109, 109, 109);
+  padding: 5px 5px 5px 5px;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.header button:hover {
+  background-color: #363636;
+  color: rgb(228, 228, 228);
+}
+
+.header button.disabled {
+  color: rgb(109, 109, 109);
+}
+.header button.disabled:hover {
+  color: rgb(109, 109, 109);
+  background-color: transparent;
 }
 
 .clears button {
-    margin-left: 2px;
-    margin-right: 2px;
-    margin-bottom: 2px;
-    border-width: 2px;
+  color: #ec1414;
+  border-color: #ec1414;
+}
+.clears button:hover {
+  background-color: #b11b1b;
+  color: rgb(228, 228, 228);
+}
+.clears button.disabled {
+  color: #967c7c;
+  border-color: #967c7c;
+}
+.clears button.disabled:hover {
+  color: #967c7c;
+  border-color: #967c7c;
+  background-color: transparent;
 }
 
-.can-cross-diagonals{
-    margin-top: 25px;
+.input-with-prepending {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.input-with-prepending > h5 {
+  font-weight: bold;
+  margin-right: 5px;
 }
 
-.can-cross-diagonals input{
-    margin-right: 5px;
-    width: 20px;
-    height: 20px;
+.input-with-prepending > input {
+  border-radius: 5px;
+  border-style: solid;
+  height: 2em;
+}
+
+#diagonals-checkbox {
+  height: 20px;
+  width: 20px;
 }

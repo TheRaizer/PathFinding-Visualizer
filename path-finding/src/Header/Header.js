@@ -1,14 +1,4 @@
 import React, { useReducer, useState } from "react";
-import {
-  Alert,
-  Button,
-  Col,
-  Container,
-  Form,
-  FormControl,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
 import AStarSearch from "../PathFindingAlgos/AStarAlgorithm";
 import dijkstrasSearch from "../PathFindingAlgos/DijkstrasAlgorithm";
 import breadthFirstSearch from "../PathFindingAlgos/BreadthFirstSearch";
@@ -37,18 +27,16 @@ function Header() {
   };
 
   return (
-    <Container id="header" className="py-3" fluid>
-      <Row className="unselectable">
-        <Col>
-          <InputGroup className="mt-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="prepending-text">
-                Animation Interval (ms)
-              </InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              id="basic-number"
-              aria-describedby="prepending-text"
+    <section className="header">
+      <div className="main">
+        <section id="click-instructions">
+          <h4>Ctrl Click: set start cell</h4>
+          <h4>Alt Click: set end cell</h4>
+        </section>
+        <div>
+          <div className="input-with-prepending">
+            <h5>Animation Interval (ms)</h5>
+            <input
               value={animationInterval}
               onChange={(evt) => {
                 if (evt.target.value !== "") {
@@ -65,104 +53,90 @@ function Header() {
               max={searchVars.maxSearchTime}
               type="number"
             />
-          </InputGroup>
-        </Col>
-        <Col className="can-cross-diagonals">
-          <Form>
-            <Form.Check
-              type="switch"
-              id="custom-switch"
-              label="Can Cross Diagonals"
+          </div>
+          <div className="input-with-prepending">
+            <h5>Can Cross Diagonals</h5>
+            <input
+              id="diagonals-checkbox"
+              type="checkbox"
               checked={canCrossDiagonals}
               onChange={() =>
                 setCanCrossDiagonals((canCrossDiagonals) => !canCrossDiagonals)
               }
             />
-          </Form>
-        </Col>
-        <Col xs={4} className="algorithms">
-          <Button
-            variant="outline-dark"
-            onClick={() => createMaze(startRecursiveDivision, dispatch)}
-            type="button"
-            className={
-              state.isSearching || state.isCreatingMaze ? "disabled" : ""
-            }
-          >
-            Create Maze
-          </Button>
-          <Button
-            variant="outline-dark"
+            <span className="slider round"></span>
+          </div>
+        </div>
+        <button
+          onClick={() => createMaze(startRecursiveDivision, dispatch)}
+          className={
+            state.isSearching || state.isCreatingMaze ? "disabled" : ""
+          }
+        >
+          Create Maze
+        </button>
+        <section className="algorithms">
+          <h4>Pathfinding Algorithms</h4>
+          <button
             onClick={() => executePathFinding(AStarSearch)}
-            type="button"
             className={
               state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             A*
-          </Button>
-          <Button
-            variant="outline-dark"
+          </button>
+          <button
             onClick={() => executePathFinding(dijkstrasSearch)}
-            type="button"
             className={
               state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             Dijkstras
-          </Button>
-          <Button
-            variant="outline-dark"
+          </button>
+          <button
             onClick={() => executePathFinding(breadthFirstSearch)}
-            type="button"
             className={
               state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             Breadth First Search
-          </Button>
-          <Button
-            variant="outline-dark"
+          </button>
+          <button
             onClick={() => executePathFinding(bestFirstSearch)}
-            type="button"
             className={
               state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             Best First Search
-          </Button>
-        </Col>
-        <Col className="clears">
-          <Button
-            variant="outline-danger"
+          </button>
+        </section>
+        <section className="clears">
+          <h4>Clearing Options</h4>
+          <button
             onClick={() => {
               if (!searchVars.isSearching && !mazeVars.isCreatingMaze) {
                 gridCl.clearEntireGrid();
               }
             }}
-            type="button"
             className={
               state.isSearching || state.isCreatingMaze ? "disabled" : ""
             }
           >
             Clear Entire Grid
-          </Button>
-          <Button
-            variant="outline-danger"
+          </button>
+          <button
             onClick={() => {
               if (!mazeVars.isCreatingMaze && !searchVars.isSearching) {
                 gridCl.clearWalls();
               }
             }}
-            type="button"
             className={
               state.isCreatingMaze || searchVars.isSearching ? "disabled" : ""
             }
           >
             Clear Walls
-          </Button>
-          <Button
-            variant="outline-danger"
+          </button>
+          <button
             onClick={() => {
               if (searchVars.isSearching) {
                 searchVars.stopSearch = true;
@@ -172,29 +146,18 @@ function Header() {
             className={state.isSearching ? "" : "disabled"}
           >
             Stop Search
-          </Button>
-        </Col>
-        <Col xs={2}>
-          <p>
-            <b>Ctrl Click:</b> set start cell
-          </p>
-          <p>
-            <b>Alt Click:</b> set end cell
-          </p>
-        </Col>
-      </Row>
-      {missingCell ? (
-        <Alert
-          variant={"danger"}
-          onClose={() => setMissingCell(false)}
-          dismissible
-        >
-          <Alert.Heading>You are missing a start or end cell</Alert.Heading>
-        </Alert>
-      ) : (
-        <div></div>
-      )}
-    </Container>
+          </button>
+        </section>
+      </div>
+      <div
+        className={`notif ${missingCell ? "appear" : ""}`}
+        onClose={() => setMissingCell(false)}
+      >
+        <div>
+          <h4>You are missing a start or end cell</h4>
+        </div>
+      </div>
+    </section>
   );
 }
 

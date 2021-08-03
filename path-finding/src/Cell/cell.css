@@ -1,40 +1,4 @@
-@keyframes cell-grow {
-  from {
-    transform: scale(1);
-    z-index: 0;
-  }
-  to {
-    transform: scale(1.2);
-    z-index: 1;
-  }
-}
-@keyframes cell-shrink {
-  from {
-    transform: scale(1.2);
-    z-index: 1;
-  }
-
-  to {
-    transform: scale(1);
-    z-index: 0;
-  }
-}
-
-.load-cell {
-  background-color: rgba(221, 221, 221, 0.603);
-  border-width: 1px;
-  border-color: rgba(102, 102, 102, 0.493);
-  border-style: solid;
-  font-size: x-small;
-  
-  user-select: none;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -o-user-select: none;
-}
-
-.cell-unhovered {
+.cell {
   background-color: rgba(221, 221, 221, 0.603);
   border-width: 1px;
   border-color: rgba(102, 102, 102, 0.493);
@@ -47,25 +11,14 @@
   -webkit-user-select: none;
   -o-user-select: none;
 
-  animation-duration: 0.3s;
-  animation-name: cell-shrink;
-  animation-fill-mode: forwards;
+  width: 1.625vw;
+  height: 3.3vh;
+
+  transition: transform 200ms linear, background-color 150ms ease-in;
+  transform: scale(1);
 }
 
-.cell-hovered {
-  background-color: rgba(221, 221, 221, 0.603);
-  border-width: 1px;
-  border-color: rgba(102, 102, 102, 0.493);
-  border-style: solid;
-  font-size: x-small;
-
-  user-select: none;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -o-user-select: none;
-  
-  animation-duration: 0.5s;
-  animation-name: cell-grow;
-  animation-fill-mode: forwards;
+.cell:hover {
+  z-index: 1;
+  transform: scale(1.2);
 }
