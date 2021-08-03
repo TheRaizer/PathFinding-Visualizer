@@ -29,9 +29,8 @@ function Header() {
   return (
     <section className="header">
       <div className="main">
-        <section id="click-instructions">
-          <h4>Ctrl Click: set start cell</h4>
-          <h4>Alt Click: set end cell</h4>
+        <section id="instructions">
+          <button>Tutorial</button>
         </section>
         <div>
           <div className="input-with-prepending">

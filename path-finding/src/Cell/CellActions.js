@@ -15,6 +15,8 @@ export const cellIsStartOrEnd = (posX, posY) => {
   );
 };
 
+var prevCellType = CELL_TYPES.EMPTY;
+
 // determines the cell type when the mouse is down/hovering over the given cell
 export const determineCellType = (cellTypeOnMouseDown, cell) => {
   // if the mouse has been released return
@@ -35,7 +37,9 @@ export const determineCellType = (cellTypeOnMouseDown, cell) => {
   if (!searchVars.isSearching) {
     // if the cell is the start, empty the previous start cell and fill the current cell as start
     if (cellTypeOnMouseDown === CELL_TYPES.START) {
-      changeCellType(gridCl.startCell, CELL_TYPES.EMPTY);
+      changeCellType(gridCl.startCell, prevCellType);
+
+      prevCellType = cell.cellType;
       gridCl.startCell = cell;
       changeCellType(cell, CELL_TYPES.START);
       return;
@@ -43,7 +47,8 @@ export const determineCellType = (cellTypeOnMouseDown, cell) => {
 
     // if the cell is the end, empty the previous end cell and fill the current cell as end
     if (cellTypeOnMouseDown === CELL_TYPES.END) {
-      changeCellType(gridCl.endCell, CELL_TYPES.EMPTY);
+      changeCellType(gridCl.endCell, prevCellType);
+      prevCellType = cell.cellType;
       gridCl.endCell = cell;
       changeCellType(cell, CELL_TYPES.END);
       return;
