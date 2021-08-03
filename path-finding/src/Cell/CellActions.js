@@ -8,6 +8,12 @@ export const CELL_TYPES = {
   OBSTACLE: 3,
 };
 
+/** Determines whether a given position is a start or end cell.
+ *
+ * @param {Number} posX - the x position of the cell.
+ * @param {Number} posY - the y position of the cell.
+ * @returns {Boolean} whether the position is a start or end cell.
+ */
 export const cellIsStartOrEnd = (posX, posY) => {
   return (
     gridCl.grid[posY][posX] === gridCl.startCell ||
@@ -15,9 +21,11 @@ export const cellIsStartOrEnd = (posX, posY) => {
   );
 };
 
-var prevCellType = CELL_TYPES.EMPTY;
-
-// determines the cell type when the mouse is down/hovering over the given cell
+/** Determines the cell type when mouse is down.
+ *
+ * @param {CELL_TYPES} cellTypeOnMouseDown - the initial cell type that the mouse was first clicked down on.
+ * @param {Cell} cell - the cell that the mouse is currently over.
+ */
 export const determineCellType = (cellTypeOnMouseDown, cell) => {
   // if the mouse has been released return
   if (cellTypeOnMouseDown === -1) return;
@@ -35,22 +43,8 @@ export const determineCellType = (cellTypeOnMouseDown, cell) => {
   }
 
   if (!searchVars.isSearching) {
-    // if the cell is the start, empty the previous start cell and fill the current cell as start
-    if (cellTypeOnMouseDown === CELL_TYPES.START) {
-      changeCellType(gridCl.startCell, prevCellType);
-
-      prevCellType = cell.cellType;
-      gridCl.startCell = cell;
-      changeCellType(cell, CELL_TYPES.START);
-      return;
-    }
-
-    // if the cell is the end, empty the previous end cell and fill the current cell as end
-    if (cellTypeOnMouseDown === CELL_TYPES.END) {
-      changeCellType(gridCl.endCell, prevCellType);
-      prevCellType = cell.cellType;
-      gridCl.endCell = cell;
-      changeCellType(cell, CELL_TYPES.END);
+    let hasMoved = moveStartEndCell(cellTypeOnMouseDown, cell);
+    if (hasMoved) {
       return;
     }
   }
@@ -58,6 +52,36 @@ export const determineCellType = (cellTypeOnMouseDown, cell) => {
     return;
   }
   changeCellType(cell, cellType);
+};
+
+var prevCellType = CELL_TYPES.EMPTY;
+/** Moves the start or end cell if needed.
+ *
+ * @param {CELL_TYPES} cellTypeOnMouseDown - the initial cell type that the mouse was first clicked down on.
+ * @param {Cell} cell - the cell that the mouse is currently over.
+ * @returns whether the start or end cell was moved.
+ */
+const moveStartEndCell = (cellTypeOnMouseDown, cell) => {
+  // if the cell is the start, reset the previous start cell back to what it was and fill the current cell as start
+  if (cellTypeOnMouseDown === CELL_TYPES.START) {
+    changeCellType(gridCl.startCell, prevCellType);
+
+    prevCellType = cell.cellType;
+    gridCl.startCell = cell;
+    changeCellType(cell, CELL_TYPES.START);
+    return true;
+  }
+
+  // if the cell is the end, reset the previous end cell back to what it was and fill the current cell as end
+  if (cellTypeOnMouseDown === CELL_TYPES.END) {
+    changeCellType(gridCl.endCell, prevCellType);
+    prevCellType = cell.cellType;
+    gridCl.endCell = cell;
+    changeCellType(cell, CELL_TYPES.END);
+    return true;
+  }
+
+  return false;
 };
 
 const changeCellType = (cell, cellType) => {
