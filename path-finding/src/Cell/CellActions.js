@@ -7,42 +7,6 @@ export const CELL_TYPES = {
   END: 2,
   OBSTACLE: 3,
 };
-// assigns the start and end cells depending on which cell you click and whether Ctrl or Alt is down.
-export const assignFinishOrStart = (evt, cell) => {
-  if (searchVars.isSearching) {
-    return;
-  }
-  if (evt.altKey) {
-    if (cell.cellType === CELL_TYPES.END) {
-      gridCl.endCell = null;
-      changeCellType(cell, CELL_TYPES.EMPTY);
-    } else {
-      if (cell.cellType === CELL_TYPES.START) {
-        gridCl.startCell = null;
-      }
-      if (gridCl.endCell != null) {
-        changeCellType(gridCl.endCell, CELL_TYPES.EMPTY);
-      }
-      changeCellType(cell, CELL_TYPES.END);
-      gridCl.endCell = cell;
-    }
-  } else if (evt.ctrlKey) {
-    if (cell.cellType === CELL_TYPES.START) {
-      gridCl.startCell = null;
-      changeCellType(cell, CELL_TYPES.EMPTY);
-    } else {
-      if (cell.cellType === CELL_TYPES.END) {
-        gridCl.endCell = null;
-      }
-
-      if (gridCl.startCell != null) {
-        changeCellType(gridCl.startCell, CELL_TYPES.EMPTY);
-      }
-      changeCellType(cell, CELL_TYPES.START);
-      gridCl.startCell = cell;
-    }
-  }
-};
 
 export const cellIsStartOrEnd = (posX, posY) => {
   return (
@@ -52,29 +16,43 @@ export const cellIsStartOrEnd = (posX, posY) => {
 };
 
 // determines the cell type when the mouse is down/hovering over the given cell
-export const determineCellType = (
-  evt,
-  mouseDown,
-  cellTypeOnMouseDown,
-  cell
-) => {
-  if (mouseDown) {
-    if (cellTypeOnMouseDown === -1) return;
-    const cellType =
-      cellTypeOnMouseDown === CELL_TYPES.EMPTY
-        ? CELL_TYPES.OBSTACLE
-        : CELL_TYPES.EMPTY;
+export const determineCellType = (cellTypeOnMouseDown, cell) => {
+  // if the mouse has been released return
+  if (cellTypeOnMouseDown === -1) return;
+  const cellType =
+    cellTypeOnMouseDown === CELL_TYPES.EMPTY
+      ? CELL_TYPES.OBSTACLE
+      : CELL_TYPES.EMPTY;
 
-    if (cell.cellType !== cellType && !evt.altKey && !evt.ctrlKey) {
-      if (cellIsStartOrEnd(cell.x, cell.y)) {
-        return;
-      }
-      if ((cell.closed || cell.opened) && searchVars.isSearching) {
-        return;
-      }
-      changeCellType(cell, cellType);
+  // if we are making a wall or erasing a wall and the cell is either start or end don't change it.
+  if (
+    (cellType !== CELL_TYPES.START || cellType !== CELL_TYPES.END) &&
+    cellIsStartOrEnd(cell.x, cell.y)
+  ) {
+    return;
+  }
+
+  if (!searchVars.isSearching) {
+    // if the cell is the start, empty the previous start cell and fill the current cell as start
+    if (cellTypeOnMouseDown === CELL_TYPES.START) {
+      changeCellType(gridCl.startCell, CELL_TYPES.EMPTY);
+      gridCl.startCell = cell;
+      changeCellType(cell, CELL_TYPES.START);
+      return;
+    }
+
+    // if the cell is the end, empty the previous end cell and fill the current cell as end
+    if (cellTypeOnMouseDown === CELL_TYPES.END) {
+      changeCellType(gridCl.endCell, CELL_TYPES.EMPTY);
+      gridCl.endCell = cell;
+      changeCellType(cell, CELL_TYPES.END);
+      return;
     }
   }
+  if ((cell.closed || cell.opened) && searchVars.isSearching) {
+    return;
+  }
+  changeCellType(cell, cellType);
 };
 
 const changeCellType = (cell, cellType) => {

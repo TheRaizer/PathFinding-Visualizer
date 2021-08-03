@@ -1,7 +1,6 @@
 .cell {
-  background-color: rgba(221, 221, 221, 0.603);
   border-width: 1px;
-  border-color: rgba(102, 102, 102, 0.493);
+  border-color: rgba(0, 0, 139, 0.342);
   border-style: solid;
   font-size: x-small;
 
@@ -14,8 +13,12 @@
   width: 1.625vw;
   height: 3.3vh;
 
-  transition: transform 200ms linear, background-color 150ms ease-in;
+  transition: transform 200ms linear, background-color 100ms ease-in;
   transform: scale(1);
+}
+
+.cell.main {
+  transition: transform 200ms linear;
 }
 
 .cell:hover {

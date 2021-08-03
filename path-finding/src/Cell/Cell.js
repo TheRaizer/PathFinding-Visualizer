@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  assignFinishOrStart,
-  determineCellType,
-  CELL_TYPES,
-} from "./CellActions";
+import { determineCellType, CELL_TYPES } from "./CellActions";
 import "./cell.css";
 
 /*The Grid
@@ -42,7 +38,7 @@ export default class Cell {
     ) {
       switch (this.cellType) {
         case CELL_TYPES.EMPTY:
-          return "rgba(221, 221, 221, 0.603)";
+          return "rgba(216, 216, 216, 0.808)";
         case CELL_TYPES.START:
           return "green";
         case CELL_TYPES.END:
@@ -53,16 +49,15 @@ export default class Cell {
           throw new Error("Out of range exception");
       }
     } else if (this.isOnPath) {
-      return "lightskyblue";
+      return "rgb(94, 193, 255)";
     } else if (this.closed) {
-      return "lightgray";
+      return "gray";
     } else if (this.opened) {
-      return "lightgreen";
+      return "rgb(117, 226, 117)";
     }
   };
 }
 
-var mouseDown = false;
 var cellTypeOnMouseDown = -1;
 
 export function CellSquareState(props) {
@@ -75,10 +70,7 @@ export function CellSquareState(props) {
     }
   }, [cell]);
 
-  document.onmousedown = () => (mouseDown = true);
-
   document.onmouseup = () => {
-    mouseDown = false;
     cellTypeOnMouseDown = -1;
   };
 
@@ -89,16 +81,17 @@ function CellSquare({ state }) {
   const { cell } = state;
   return (
     <div
-      className={"cell"}
+      className={`cell ${
+        cell.cellType === CELL_TYPES.START || cell.cellType === CELL_TYPES.END
+          ? "main"
+          : ""
+      }`}
       style={{ backgroundColor: cell.getCellColor() }}
-      onMouseMove={(evt) =>
-        determineCellType(evt, mouseDown, cellTypeOnMouseDown, cell)
-      }
-      onMouseDown={(evt) => {
+      onMouseMove={() => determineCellType(cellTypeOnMouseDown, cell)}
+      onMouseDown={() => {
         cellTypeOnMouseDown = cell.cellType;
-        determineCellType(evt, true, cellTypeOnMouseDown, cell);
+        determineCellType(cellTypeOnMouseDown, cell);
       }}
-      onClick={(evt) => assignFinishOrStart(evt, cell)}
     ></div>
   );
 }
