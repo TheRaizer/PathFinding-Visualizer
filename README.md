@@ -1,5 +1,5 @@
 # Pathfinding Algorithms
-The link to the website is **https://theraizer.github.io/PathFinding-Algorithms/**
+The link to the website is **https://theraizer.github.io/PathFinding-Visualizer/**
 
 The pathfinding algorithms included are:
 - ## A*
