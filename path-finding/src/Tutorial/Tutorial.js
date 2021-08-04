@@ -38,6 +38,7 @@ function Tutorial() {
           <Slides
             description="Welcome to the Pathfinding Visualizer Tutorial!"
             imgSrc={firstSlideSrc}
+            extraMsg="(If you want to view this again click 'Rewatch Tutorial' at the bottom right of the screen)"
           />
         ) : (
           <></>

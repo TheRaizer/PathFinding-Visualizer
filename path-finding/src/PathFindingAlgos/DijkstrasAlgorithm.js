@@ -115,7 +115,6 @@ export default async function dijkstrasSearch(canCrossDiagonals) {
     const path = retracePath(startCell, endCell);
     return path;
   }
-  console.log("no path found");
 }
 
 /* Resets the cells to have the maximum gCost before adding them to the heap.

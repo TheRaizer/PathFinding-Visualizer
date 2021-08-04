@@ -117,8 +117,6 @@ export default async function bestFirstSearch(canCrossDiagonals) {
   if (foundPath) {
     const path = retracePath(startCell, endCell);
     return path;
-  } else {
-    console.log("no path found");
   }
 }
 

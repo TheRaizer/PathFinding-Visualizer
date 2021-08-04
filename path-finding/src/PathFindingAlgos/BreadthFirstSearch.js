@@ -113,8 +113,6 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
   if (foundPath) {
     const path = retracePath(startCell, endCell);
     return path;
-  } else {
-    console.log("no path found");
   }
 }
 

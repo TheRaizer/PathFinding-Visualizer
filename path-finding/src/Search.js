@@ -70,7 +70,6 @@ export async function pathFind(canCrossDiagonals, headerDispatch, search) {
  */
 function endSearch(headerDispatch, foundPath) {
   searchVars.isSearching = false;
-  console.log(foundPath);
   // if the path wasnt found and stop search wasnt the reason then dispatch
   if (!foundPath && !searchVars.stopSearch) {
     headerDispatch({ type: ALGO_ACTIONS.FOUND_PATH, payload: foundPath });
