@@ -1,23 +1,31 @@
 {
   "files": {
-    "main.css": "/PathFinding-Visualizer/static/css/main.36c7ab07.chunk.css",
-    "main.js": "/PathFinding-Visualizer/static/js/main.e37c4736.chunk.js",
-    "main.js.map": "/PathFinding-Visualizer/static/js/main.e37c4736.chunk.js.map",
+    "main.css": "/PathFinding-Visualizer/static/css/main.81981c11.chunk.css",
+    "main.js": "/PathFinding-Visualizer/static/js/main.c7b8acc0.chunk.js",
+    "main.js.map": "/PathFinding-Visualizer/static/js/main.c7b8acc0.chunk.js.map",
     "runtime-main.js": "/PathFinding-Visualizer/static/js/runtime-main.8b3993fe.js",
     "runtime-main.js.map": "/PathFinding-Visualizer/static/js/runtime-main.8b3993fe.js.map",
     "static/css/2.4be38407.chunk.css": "/PathFinding-Visualizer/static/css/2.4be38407.chunk.css",
-    "static/js/2.0f8c9a94.chunk.js": "/PathFinding-Visualizer/static/js/2.0f8c9a94.chunk.js",
-    "static/js/2.0f8c9a94.chunk.js.map": "/PathFinding-Visualizer/static/js/2.0f8c9a94.chunk.js.map",
+    "static/js/2.5fd29207.chunk.js": "/PathFinding-Visualizer/static/js/2.5fd29207.chunk.js",
+    "static/js/2.5fd29207.chunk.js.map": "/PathFinding-Visualizer/static/js/2.5fd29207.chunk.js.map",
     "index.html": "/PathFinding-Visualizer/index.html",
     "static/css/2.4be38407.chunk.css.map": "/PathFinding-Visualizer/static/css/2.4be38407.chunk.css.map",
-    "static/css/main.36c7ab07.chunk.css.map": "/PathFinding-Visualizer/static/css/main.36c7ab07.chunk.css.map",
-    "static/js/2.0f8c9a94.chunk.js.LICENSE.txt": "/PathFinding-Visualizer/static/js/2.0f8c9a94.chunk.js.LICENSE.txt"
+    "static/css/main.81981c11.chunk.css.map": "/PathFinding-Visualizer/static/css/main.81981c11.chunk.css.map",
+    "static/js/2.5fd29207.chunk.js.LICENSE.txt": "/PathFinding-Visualizer/static/js/2.5fd29207.chunk.js.LICENSE.txt",
+    "static/media/TutorialSlide1.e4c22914.gif": "/PathFinding-Visualizer/static/media/TutorialSlide1.e4c22914.gif",
+    "static/media/TutorialSlide2.0ba6a13d.gif": "/PathFinding-Visualizer/static/media/TutorialSlide2.0ba6a13d.gif",
+    "static/media/TutorialSlide3.54691368.gif": "/PathFinding-Visualizer/static/media/TutorialSlide3.54691368.gif",
+    "static/media/TutorialSlide4.75f1b2a5.png": "/PathFinding-Visualizer/static/media/TutorialSlide4.75f1b2a5.png",
+    "static/media/TutorialSlide5.f70c7ebf.png": "/PathFinding-Visualizer/static/media/TutorialSlide5.f70c7ebf.png",
+    "static/media/TutorialSlide6.4d0807b2.png": "/PathFinding-Visualizer/static/media/TutorialSlide6.4d0807b2.png",
+    "static/media/TutorialSlide7.252e168e.png": "/PathFinding-Visualizer/static/media/TutorialSlide7.252e168e.png",
+    "static/media/TutorialSlide8.b34ab59b.gif": "/PathFinding-Visualizer/static/media/TutorialSlide8.b34ab59b.gif"
   },
   "entrypoints": [
     "static/js/runtime-main.8b3993fe.js",
     "static/css/2.4be38407.chunk.css",
-    "static/js/2.0f8c9a94.chunk.js",
-    "static/css/main.36c7ab07.chunk.css",
-    "static/js/main.e37c4736.chunk.js"
+    "static/js/2.5fd29207.chunk.js",
+    "static/css/main.81981c11.chunk.css",
+    "static/js/main.c7b8acc0.chunk.js"
   ]
 }
