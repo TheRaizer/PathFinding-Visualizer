@@ -51,7 +51,7 @@ export async function pathFind(canCrossDiagonals, headerDispatch, search) {
     console.error(err);
   });
 
-  // no path was found
+  // path was either not found or stop search was called
   if (path == null) {
     endSearch(headerDispatch, false);
     return;
@@ -70,9 +70,13 @@ export async function pathFind(canCrossDiagonals, headerDispatch, search) {
  */
 function endSearch(headerDispatch, foundPath) {
   searchVars.isSearching = false;
+  console.log(foundPath);
+  // if the path wasnt found and stop search wasnt the reason then dispatch
+  if (!foundPath && !searchVars.stopSearch) {
+    headerDispatch({ type: ALGO_ACTIONS.FOUND_PATH, payload: foundPath });
+  }
   searchVars.stopSearch = false;
   headerDispatch({ type: ALGO_ACTIONS.IS_SEARCHING, payload: false });
-  headerDispatch({ type: ALGO_ACTIONS.FOUND_PATH, payload: foundPath });
 }
 
 async function drawPath(path) {

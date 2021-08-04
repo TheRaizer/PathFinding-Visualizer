@@ -58,7 +58,6 @@ export default async function bestFirstSearch(canCrossDiagonals) {
     // get the next most optimal cell according to hCost
     var currentCell = unvisitedHeap.pop();
     if (searchVars.stopSearch) {
-      searchVars.stopSearch = false;
       return;
     }
     if (currentCell === endCell) {

@@ -138,7 +138,11 @@ function Header() {
           </button>
         </section>
       </div>
-      <div className={`notif ${state.foundPath === true ? "" : "appear"}`}>
+      <div
+        className={`notif ${
+          !state.foundPath && !searchVars.stopSearch ? "appear" : ""
+        }`}
+      >
         <div>
           <h4>No path was found!</h4>
           <button

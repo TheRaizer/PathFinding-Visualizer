@@ -53,7 +53,6 @@ export default async function breadthFirstSearch(canCrossDiagonals) {
 
   while (unvisitedQueue.size() > 0) {
     if (searchVars.stopSearch) {
-      searchVars.stopSearch = false;
       return;
     }
     currentCell = unvisitedQueue.deQueue();

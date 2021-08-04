@@ -49,7 +49,6 @@ export default async function dijkstrasSearch(canCrossDiagonals) {
 
   while (!unvisitedHeap.empty()) {
     if (searchVars.stopSearch) {
-      searchVars.stopSearch = false;
       return;
     }
     if (currentCell === endCell) {

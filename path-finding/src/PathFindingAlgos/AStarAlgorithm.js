@@ -45,7 +45,6 @@ export default async function AStarSearch(canCrossDiagonals) {
 
   while (!openHeap.empty()) {
     if (searchVars.stopSearch) {
-      searchVars.stopSearch = false;
       return;
     }
 
