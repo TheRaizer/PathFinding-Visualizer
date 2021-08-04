@@ -31,6 +31,7 @@ function Tutorial() {
         Rewatch Tutorial
       </button>
       <section className="slides" ref={slides}>
+        <h1>Tutorial</h1>
         <div id="skip">
           <button onClick={() => skip()}>Skip</button>
         </div>
